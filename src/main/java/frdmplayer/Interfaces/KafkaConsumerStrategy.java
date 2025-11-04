@@ -2,8 +2,8 @@ package frdmplayer.Interfaces;
 
 import frdmplayer.KafkaMethods.MethodsKafka;
 
-public interface KafkaConsumerStrategy<T> {
-    void handle(T dto, MethodsKafka methodsKafka);
-    Class<T> getDTOClass();
+public interface KafkaConsumerStrategy {
+    void handle(Object dto, MethodsKafka methodsKafka);
+    Class getDTOClass();
 
 }

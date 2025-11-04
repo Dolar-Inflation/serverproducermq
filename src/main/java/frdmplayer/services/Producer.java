@@ -3,6 +3,7 @@ package frdmplayer.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import frdmplayer.Interfaces.KafkaProducerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
+import frdmplayer.ObjToJSON.ObjToJSON;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,14 @@ import java.util.concurrent.CompletableFuture;
 public class Producer {
 
 
-    private final List<KafkaProducerStrategy<?>> strategies;
+    private final List<KafkaProducerStrategy > strategies;
 
 
     @Async
     public CompletableFuture<Void>send(Object dto , MethodsKafka methodsKafka) throws JsonProcessingException {
-        for(KafkaProducerStrategy<?> strategy : strategies) {
+        for(KafkaProducerStrategy strategy : strategies) {
             if(strategy.supports(dto, methodsKafka)) {
+
                 sendWithStrategy(strategy,dto,methodsKafka);
                 return CompletableFuture.completedFuture(null);
             }
@@ -29,9 +31,10 @@ public class Producer {
         throw new RuntimeException("No support for KafkaProducerStrategy");
     }
     @SuppressWarnings("unchecked")
-    public <T> void sendWithStrategy(KafkaProducerStrategy<T> strategy, Object dto, MethodsKafka methodsKafka) throws JsonProcessingException {
+    public void sendWithStrategy(KafkaProducerStrategy strategy, Object dto, MethodsKafka methodsKafka) throws JsonProcessingException {
 
-        KafkaObertka<T> obertka = new KafkaObertka<>((T) dto,methodsKafka);
+        KafkaObertka obertka = new KafkaObertka( dto,methodsKafka);
+
         strategy.send(obertka);
     }
 

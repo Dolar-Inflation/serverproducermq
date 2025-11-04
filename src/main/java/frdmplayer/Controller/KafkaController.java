@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import frdmplayer.DTO.*;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.MapEntity.EntityToDTO;
+import frdmplayer.ObjToJSON.ObjToJSON;
 import frdmplayer.Repository.EmployesphoneRepository;
 import frdmplayer.services.GetDbInfo;
 //import frdmplayer.services.KafkaProduser;
@@ -39,6 +40,7 @@ public class KafkaController {
 //        producerService.sendMessage(message);
 //        producer.sendCreateEmployee(message);
 //        producer.send(message);
+
         producer.send(message,MethodsKafka.CREATE);
         return "employe data added " + message+"method sent"+MethodsKafka.values();
     }

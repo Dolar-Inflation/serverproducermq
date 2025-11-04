@@ -14,6 +14,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -32,29 +33,32 @@ public class Consumer {
 
     @Async
     @KafkaHandler
-    CompletableFuture<Void> consumer(KafkaObertka<?> obertka) throws JsonProcessingException {
+    CompletableFuture<Void> consumer(KafkaObertka obertka) throws JsonProcessingException {
+//TODO НАПИСАТЬ КАСТОМНУЮ ДЕСЕАРИЛИЗАЦИЮ ДЛЯ PAYLOAD
 
         Object payload = obertka.getPayload();
         MethodsKafka methodsKafka = obertka.getMethodsKafka();
-        objToJSON.convertToJson(payload);
+
         System.out.println(payload + "ДАННЫЕ ПОЛУЧЕНЫ" + methodsKafka);
         System.out.println("payload class = " + (payload == null ? "null" : payload.getClass().getName()));
+        System.out.println("methodskafka class = " + (methodsKafka == null ? "null" : payload.getClass().getName()));
         System.out.println("o.getPayload() = " + payload);
         System.out.println("methodsKafka = " + obertka.getMethodsKafka());
-        try {
-            EmployeeDTO employeeDTO;
-            if (payload instanceof EmployeeDTO emplDTO) {
-                employeeDTO = emplDTO;
 
+        try {
+
+            if (payload instanceof EmployeeDTO emplDTO) {
+
+                handleEmployeeDTO(emplDTO, methodsKafka);
             }
 //            else if (payload instanceof PhoneNumberDTO phoneNumberDTO) {
 //                phoneNumberDTO = phoneNumberDTO;
 //            }
             else {
-                ObjectMapper objectMapper = new ObjectMapper();
-                employeeDTO = objectMapper.convertValue(payload, EmployeeDTO.class);
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                employeeDTO = objectMapper.convertValue(payload, EmployeeDTO.class);
                 System.out.println("Поток выполнения consumeEmployee: " + Thread.currentThread().getName());
-                handleEmployeeDTO(employeeDTO, methodsKafka);
+
             }
 //            PhoneNumberDTO phoneNumberDTO;
 //            if (payload instanceof PhoneNumberDTO pnDTO) {

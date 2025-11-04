@@ -6,7 +6,7 @@ import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.services.KafkaObertka;
 import org.apache.kafka.common.internals.Topic;
 
-public interface KafkaProducerStrategy<T> {
+public interface KafkaProducerStrategy {
 
     boolean supports(Object obj, MethodsKafka operation);
     void send(/*String topic,*/Object dto) throws JsonProcessingException;

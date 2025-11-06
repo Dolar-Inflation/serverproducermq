@@ -20,7 +20,7 @@ public class UpdateDataService {
    public final PhoneRepository phoneRepository;
 
     public  void updateData(EmployePhoneFullDTO employePhoneFullDTO){
-        Employee employee = employeeRepository.findById(employePhoneFullDTO.getEmployeeId()).orElseThrow(()
+        Employee employee = employeeRepository.findById(employePhoneFullDTO.getEmployeId()).orElseThrow(()
                 ->new RuntimeException("Employee not found"));
 
         if (employePhoneFullDTO !=null) employee.setFio(employePhoneFullDTO.getFio());

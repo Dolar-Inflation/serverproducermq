@@ -35,12 +35,12 @@ public class KafkaController {
     }
 
     @PostMapping("/api/messages/addemploye")
-    public String sendName(@RequestBody EmployeeDTO message) throws JsonProcessingException {
+    public EmployeeDTO sendName(@RequestBody EmployeeDTO message) throws JsonProcessingException {
 //        producerService.sendMessage(message);
 //        producer.sendCreateEmployee(message);
 //        producer.send(message);
         producer.send(message,MethodsKafka.CREATE);
-        return "employe data added " + message+"method sent"+MethodsKafka.values();
+        return message;
     }
 
     @PostMapping("/api/messages/addphone")

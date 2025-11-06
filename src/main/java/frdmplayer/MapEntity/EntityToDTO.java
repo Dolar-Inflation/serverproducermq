@@ -78,7 +78,7 @@ public class EntityToDTO {
 
         Employee employee = employeephonerelation.getEmployee();
 
-        employePhoneFullDTO.setEmployeeId(employee.getId());
+        employePhoneFullDTO.setEmployeId(employee.getId());
         employePhoneFullDTO.setFio(employee.getFio());
         employePhoneFullDTO.setAddress(employee.getAddress());
         employePhoneFullDTO.setPosition(employee.getPosition());

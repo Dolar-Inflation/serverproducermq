@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class EmployePhoneFullDTO {
     private Integer id;
 
-    private Integer employeeId;
+    private Integer employeId;
     private String fio;
     private String address;
     private String position;

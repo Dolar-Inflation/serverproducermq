@@ -2,6 +2,8 @@ package frdmplayer.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import frdmplayer.DTO.EmployePhoneDTO;
+import frdmplayer.DTO.EmployePhoneFullDTO;
 import frdmplayer.DTO.EmployeeDTO;
 import frdmplayer.DTO.PhoneNumberDTO;
 import frdmplayer.KafkaMethods.MethodsKafka;
@@ -23,15 +25,17 @@ public class Consumer {
     private final DeleteDataById deleteDataById;
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
+    private final UpdateDataService updateDataService;
 
     @Autowired
-    public Consumer(SaveDataService saveDataService, DeleteDataById deleteDataById, ObjToJSON objToJSON, ObjectMapper objectMapper) {
+    public Consumer(SaveDataService saveDataService, DeleteDataById deleteDataById, ObjToJSON objToJSON, ObjectMapper objectMapper, UpdateDataService updateDataService) {
         this.saveDataService = saveDataService;
         this.deleteDataById = deleteDataById;
         this.objToJSON = objToJSON;
         this.objectMapper = objectMapper;
+        this.updateDataService = updateDataService;
     }
-
+//TODO Реализовать паттерн стратегия со стороны консьюмера
     @Async
     @KafkaHandler
     CompletableFuture<Void> consumer(KafkaObertka obertka) throws JsonProcessingException {
@@ -53,7 +57,17 @@ public class Consumer {
                 PhoneNumberDTO phoneNumberDTO = objectMapper.convertValue(payload, PhoneNumberDTO.class);
                 System.out.println("<UNK> <UNK> consumePhoneNumber: " + Thread.currentThread().getName());
                 handlePhoneDTO(phoneNumberDTO, methodsKafka);
+                case "EmployePhoneDTO":
+                    EmployePhoneDTO empPhoneDTO = objectMapper.convertValue(payload, EmployePhoneDTO.class);
+                    System.out.println("<UNK> <UNK> consumeEmployeePhone: " + Thread.currentThread().getName());
+                    handleEmployePhoneDTO(empPhoneDTO, methodsKafka);
+            case "EmployePhoneFullDTO": //TODO сообщение не приходит разобраться
+                EmployePhoneFullDTO employePhoneFullDTO=objectMapper.convertValue(payload, EmployePhoneFullDTO.class);
+                System.out.println("<UNK> <UNK> consumeEmployeePhoneFull: " + Thread.currentThread().getName());
+                handleEmployePhoneFullDTO(employePhoneFullDTO, methodsKafka);
+
         }
+
 
 
         return CompletableFuture.completedFuture(null);
@@ -114,7 +128,22 @@ public class Consumer {
     public void handlePhoneDTO (PhoneNumberDTO phoneNumberDTO, MethodsKafka methodsKafka){
         switch (methodsKafka) {
             case CREATE -> saveDataService.savePhoneNumberDTO(phoneNumberDTO);
+            case DELETE -> deleteDataById.deleteEmployeePhoneDataById(phoneNumberDTO);
 
+        }
+    }
+    public void handleEmployePhoneDTO(EmployePhoneDTO employePhoneDTO,MethodsKafka methodsKafka){
+        switch (methodsKafka) {
+            case CREATE -> saveDataService.saveEmployePhoneRelation(employePhoneDTO);
+            case DELETE -> deleteDataById.deleteRelationDataById(employePhoneDTO);
+
+        }
+
+
+    }
+    public void handleEmployePhoneFullDTO(EmployePhoneFullDTO employePhoneFullDTO,MethodsKafka methodsKafka ){
+        switch (methodsKafka) {
+            case PATCH -> updateDataService.updateData(employePhoneFullDTO);
         }
     }
 }

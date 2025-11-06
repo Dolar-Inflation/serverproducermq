@@ -50,11 +50,12 @@ public class KafkaController {
         return "phone added: " + message+"method sent"+MethodsKafka.values();
     }
 
-//    @PostMapping("/api/messages/addrelation")
-//    public String sendRelation(@RequestBody EmployePhoneDTO message) throws JsonProcessingException {
-////        producerService.sendRelation(message);
-//        return "relation created " + message;
-//    }
+    @PostMapping("/api/messages/addrelation")
+    public String sendRelation(@RequestBody EmployePhoneDTO message) throws JsonProcessingException {
+//        producerService.sendRelation(message);
+        producer.send(message,MethodsKafka.CREATE);
+        return "relation created " + message;
+    }
 
     //    @GetMapping("/")
 //    public String DbInfo(EmployePhoneDTO message) throws JsonProcessingException {
@@ -80,13 +81,15 @@ public class KafkaController {
 //
 //    }
 
-//    @DeleteMapping("/relation/{id}")
-//    public EmployePhoneFullDTO deleteEmployeeRelation(@PathVariable Integer id) throws JsonProcessingException {
-//        EmployePhoneFullDTO employePhoneFullDTO = new EmployePhoneFullDTO();
-//        employePhoneFullDTO.setId(id);
-////        producerService.sendFullEmployePhoneDeleteByID(employePhoneFullDTO);
-//        System.out.println("employee Relation data deleted " +  employePhoneFullDTO);
-//        return employePhoneFullDTO;
+    @DeleteMapping("/relation/{id}")
+    public EmployePhoneDTO deleteEmployeeRelation(@PathVariable Integer id) throws JsonProcessingException {
+        EmployePhoneDTO employePhoneDTO = new EmployePhoneDTO();
+        employePhoneDTO.setId(id);
+        producer.send(employePhoneDTO,MethodsKafka.DELETE);
+//        producerService.sendFullEmployePhoneDeleteByID(employePhoneFullDTO);
+        System.out.println("employee Relation data deleted " + employePhoneDTO);
+        return employePhoneDTO;
+    }
 //    }
     @DeleteMapping("/employee/delete")
     public EmployeeDTO deleteEmployee(@RequestBody EmployeeDTO employeeDTO ) throws JsonProcessingException {
@@ -100,11 +103,17 @@ public class KafkaController {
         System.out.println("employee data deleted " +  employeeDTO+"method sent"+MethodsKafka.values());
         return employeeDTO;
     }
+    @DeleteMapping("/phone/delete")
+    public PhoneNumberDTO deletePhone(@RequestBody PhoneNumberDTO phoneNumberDTO ) throws JsonProcessingException {
+        producer.send(phoneNumberDTO,MethodsKafka.DELETE);
+        return phoneNumberDTO;
+    }
 
 @PatchMapping("/")
-    public UpdateDto updateEmployee(@RequestBody UpdateDto message) throws JsonProcessingException {
+    public EmployePhoneFullDTO updateAllRecords(@RequestBody EmployePhoneFullDTO message) throws JsonProcessingException {
 //        producerService.sendUpdateDto(message);
-        System.out.println("employee data updated " + message);
+    producer.send(message,MethodsKafka.PATCH);
+        System.out.println("employee data sent " + message);
         return message;
 
 }

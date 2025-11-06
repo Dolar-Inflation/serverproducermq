@@ -2,7 +2,6 @@ package frdmplayer.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import frdmplayer.DTO.*;
-import frdmplayer.ObjToJSON.ObjToJSON;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -63,7 +62,7 @@ public class KafkaProduser  {
 
     }
     @Async
-    public CompletableFuture<Void> sendFullEmployePhoneDeleteByID(EmployePhoneFullDTO message) throws JsonProcessingException {
+    public CompletableFuture<Void> sendFullEmployePhoneDeleteByID(EmployePhoneFullDTOStrategy message) throws JsonProcessingException {
         System.out.println("delete by id"+message);
 
         kafkaTemplate.send(TOPIC, message);

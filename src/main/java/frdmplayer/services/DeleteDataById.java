@@ -1,5 +1,6 @@
 package frdmplayer.services;
 
+import frdmplayer.DTO.EmployePhoneDTO;
 import frdmplayer.DTO.EmployePhoneFullDTO;
 import frdmplayer.DTO.EmployeeDTO;
 import frdmplayer.DTO.PhoneNumberDTO;
@@ -17,8 +18,8 @@ public class DeleteDataById {
     EntityToDTO entityToDTO;
 
 
-    public void deleteRelationDataById(EmployePhoneFullDTO employePhoneFullDTO) {
-        employesphoneRepository.deleteById(employePhoneFullDTO.getId());
+    public void deleteRelationDataById(EmployePhoneDTO employePhoneDTO) {
+        employesphoneRepository.deleteById(employePhoneDTO.getId());
 
     }
     public void deleteEmployeeDataById(EmployeeDTO employeeDTO) {

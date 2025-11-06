@@ -19,26 +19,26 @@ public class UpdateDataService {
    public final EmployesphoneRepository emphoneRepository;
    public final PhoneRepository phoneRepository;
 
-    public  void updateData(UpdateDto updateDto){
-        Employee employee = employeeRepository.findById(updateDto.getEmployeeId()).orElseThrow(()
+    public  void updateData(EmployePhoneFullDTO employePhoneFullDTO){
+        Employee employee = employeeRepository.findById(employePhoneFullDTO.getEmployeeId()).orElseThrow(()
                 ->new RuntimeException("Employee not found"));
 
-        if (updateDto !=null) employee.setFio(updateDto.getFio());
-        if (updateDto !=null) employee.setAddress(updateDto.getAddress());
-        if (updateDto !=null) employee.setPosition(updateDto.getPosition());
+        if (employePhoneFullDTO !=null) employee.setFio(employePhoneFullDTO.getFio());
+        if (employePhoneFullDTO !=null) employee.setAddress(employePhoneFullDTO.getAddress());
+        if (employePhoneFullDTO !=null) employee.setPosition(employePhoneFullDTO.getPosition());
         employeeRepository.save(employee);
 
-        Phone phone = phoneRepository.findById(updateDto.getPhoneId()).orElseThrow(()
+        Phone phone = phoneRepository.findById(employePhoneFullDTO.getPhoneId()).orElseThrow(()
                 ->new RuntimeException("Phone not found"));
 
-        if (updateDto !=null) phone.setNumber(updateDto.getNumber());
-        if (updateDto !=null) phone.setType(updateDto.getType());
+        if (employePhoneFullDTO !=null) phone.setNumber(employePhoneFullDTO.getNumber());
+        if (employePhoneFullDTO !=null) phone.setType(employePhoneFullDTO.getType());
         phoneRepository.save(phone);
 
-        Employeephonerelation employeephonerelation = emphoneRepository.findById(updateDto.getId()).orElseThrow(()
+        Employeephonerelation employeephonerelation = emphoneRepository.findById(employePhoneFullDTO.getId()).orElseThrow(()
                 ->new RuntimeException("Employee phone relation not found"));
-        if (updateDto !=null) employeephonerelation.setEmployee(employee);
-        if (updateDto !=null) employeephonerelation.setPhone(phone);
+        if (employePhoneFullDTO !=null) employeephonerelation.setEmployee(employee);
+        if (employePhoneFullDTO !=null) employeephonerelation.setPhone(phone);
         emphoneRepository.save(employeephonerelation);
 
 

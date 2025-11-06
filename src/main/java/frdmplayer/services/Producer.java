@@ -24,6 +24,7 @@ public class Producer {
         for(KafkaProducerStrategy<?> strategy : strategies) {
             if(strategy.supports(dto, methodsKafka)) {
                 sendWithStrategy(strategy,dto,methodsKafka,payloadClassName);
+                System.out.println(Thread.currentThread().getName() + ": Sent to Kafka");
                 return CompletableFuture.completedFuture(null);
             }
         }

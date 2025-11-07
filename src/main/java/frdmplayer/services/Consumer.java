@@ -118,7 +118,7 @@ public class Consumer {
         switch (methodsKafka) {
             case CREATE -> saveDataService.saveEmployeDTO(employeeDTO);
             case DELETE -> deleteDataById.deleteEmployeeDataById(employeeDTO);
-            //TODO внедрить бизнес логику
+
 
 
         }

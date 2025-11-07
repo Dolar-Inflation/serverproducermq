@@ -15,13 +15,13 @@ import java.util.concurrent.CompletableFuture;
 public class Producer {
 
 
-    private final List<KafkaProducerStrategy<?>> strategies;
+    private final List<KafkaProducerStrategy> strategies;
 
 
     @Async
     public CompletableFuture<Void>send(Object dto , MethodsKafka methodsKafka) throws JsonProcessingException {
         String payloadClassName = dto.getClass().getSimpleName();
-        for(KafkaProducerStrategy<?> strategy : strategies) {
+        for(KafkaProducerStrategy strategy : strategies) {
             if(strategy.supports(dto, methodsKafka)) {
                 sendWithStrategy(strategy,dto,methodsKafka,payloadClassName);
                 System.out.println(Thread.currentThread().getName() + ": Sent to Kafka");

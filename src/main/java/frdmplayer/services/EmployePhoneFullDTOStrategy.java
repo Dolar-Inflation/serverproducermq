@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EmployePhoneFullDTOStrategy implements KafkaProducerStrategy<EmployePhoneFullDTO> {
+public class EmployePhoneFullDTOStrategy implements KafkaProducerStrategy {
     private final KafkaTemplate<String,Object> kafkaTemplate;
     private final ObjToJSON objToJSON;
     private static final String TOPIC = "test-topic";

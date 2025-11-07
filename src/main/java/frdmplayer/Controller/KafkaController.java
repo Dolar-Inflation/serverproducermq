@@ -57,7 +57,7 @@ public class KafkaController {
         return "relation created " + message;
     }
 
-    //    @GetMapping("/")
+//        @GetMapping("/")
 //    public String DbInfo(EmployePhoneDTO message) throws JsonProcessingException {
 //        getDbInfo.getDbInfo(message);
 //        return "db info " + message;

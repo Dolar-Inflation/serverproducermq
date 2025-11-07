@@ -74,7 +74,7 @@ public class EntityToDTO {
     public EmployePhoneFullDTO convertToEmployeePhoneFullDTO(Employeephonerelation employeephonerelation) {
         EmployePhoneFullDTO employePhoneFullDTO = new EmployePhoneFullDTO();
 
-        employePhoneFullDTO.setId(employeephonerelation.getId());
+//        employePhoneFullDTO.setId(employeephonerelation.getId());
 
         Employee employee = employeephonerelation.getEmployee();
 

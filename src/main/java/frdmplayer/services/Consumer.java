@@ -26,14 +26,16 @@ public class Consumer {
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
     private final UpdateDataService updateDataService;
+    private final Consume consume;
 
     @Autowired
-    public Consumer(SaveDataService saveDataService, DeleteDataById deleteDataById, ObjToJSON objToJSON, ObjectMapper objectMapper, UpdateDataService updateDataService) {
+    public Consumer(SaveDataService saveDataService, DeleteDataById deleteDataById, ObjToJSON objToJSON, ObjectMapper objectMapper, UpdateDataService updateDataService, Consume consume) {
         this.saveDataService = saveDataService;
         this.deleteDataById = deleteDataById;
         this.objToJSON = objToJSON;
         this.objectMapper = objectMapper;
         this.updateDataService = updateDataService;
+        this.consume = consume;
     }
 //TODO Реализовать паттерн стратегия со стороны консьюмера
     @Async
@@ -48,29 +50,33 @@ public class Consumer {
         System.out.println("payload class = " + (payload == null ? "null" : payload.getClass().getName()));
         System.out.println("o.getPayload() = " + payload);
         System.out.println("methodsKafka = " + obertka.getMethodsKafka());
-        switch (className) {
-            case "EmployeeDTO":
-                EmployeeDTO employeeDTO = objectMapper.convertValue(payload, EmployeeDTO.class);
-                System.out.println("Поток выполнения consumeEmployee: " + Thread.currentThread().getName());
-                handleEmployeeDTO(employeeDTO, methodsKafka);
-            case "PhoneNumberDTO":
-                PhoneNumberDTO phoneNumberDTO = objectMapper.convertValue(payload, PhoneNumberDTO.class);
-                System.out.println("<UNK> <UNK> consumePhoneNumber: " + Thread.currentThread().getName());
-                handlePhoneDTO(phoneNumberDTO, methodsKafka);
-                case "EmployePhoneDTO":
-                    EmployePhoneDTO empPhoneDTO = objectMapper.convertValue(payload, EmployePhoneDTO.class);
-                    System.out.println("<UNK> <UNK> consumeEmployeePhone: " + Thread.currentThread().getName());
-                    handleEmployePhoneDTO(empPhoneDTO, methodsKafka);
-            case "EmployePhoneFullDTO": //TODO сообщение не приходит разобраться
-                EmployePhoneFullDTO employePhoneFullDTO=objectMapper.convertValue(payload, EmployePhoneFullDTO.class);
-                System.out.println("<UNK> <UNK> consumeEmployeePhoneFull: " + Thread.currentThread().getName());
-                handleEmployePhoneFullDTO(employePhoneFullDTO, methodsKafka);
 
-        }
+//TODO ДОПИСАТЬ СТРАТЕГИИ ДЛЯ ВСЕХ DTO
+
+//        switch (className) {
+//            case "EmployeeDTO":
+//                EmployeeDTO employeeDTO = objectMapper.convertValue(payload, EmployeeDTO.class);
+//                System.out.println("Поток выполнения consumeEmployee: " + Thread.currentThread().getName());
+//
+////                handleEmployeeDTO(employeeDTO, methodsKafka);
+//            case "PhoneNumberDTO":
+//                PhoneNumberDTO phoneNumberDTO = objectMapper.convertValue(payload, PhoneNumberDTO.class);
+//                System.out.println("<UNK> <UNK> consumePhoneNumber: " + Thread.currentThread().getName());
+//                handlePhoneDTO(phoneNumberDTO, methodsKafka);
+//                case "EmployePhoneDTO":
+//                    EmployePhoneDTO empPhoneDTO = objectMapper.convertValue(payload, EmployePhoneDTO.class);
+//                    System.out.println("<UNK> <UNK> consumeEmployeePhone: " + Thread.currentThread().getName());
+//                    handleEmployePhoneDTO(empPhoneDTO, methodsKafka);
+//            case "EmployePhoneFullDTO": //TODO сообщение не приходит разобраться
+//                EmployePhoneFullDTO employePhoneFullDTO=objectMapper.convertValue(payload, EmployePhoneFullDTO.class);
+//                System.out.println("<UNK> <UNK> consumeEmployeePhoneFull: " + Thread.currentThread().getName());
+//                handleEmployePhoneFullDTO(employePhoneFullDTO, methodsKafka);
+//
+//        }
 
 
 
-        return CompletableFuture.completedFuture(null);
+        return consume.consume(payload, className, methodsKafka);
 
 //        try {
 //            EmployeeDTO employeeDTO;

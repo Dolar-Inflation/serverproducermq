@@ -6,7 +6,9 @@ import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
     private final SaveDataService saveDataService;
@@ -15,10 +17,7 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
     private final ObjectMapper objectMapper;
     private final UpdateDataService updateDataService;
 
-    @Override
-    public boolean supports(Object obj, MethodsKafka operation) {
-        return obj instanceof EmployeeDTO;
-    }
+
 
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
@@ -29,16 +28,13 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
     }
 
     @Override
-    public Class getDTOClass(Object obj, MethodsKafka methodsKafka, String Classname) {
-        switch (Classname){
-            case "EmployeeDTO":
-                EmployeeDTO employeeDTO = objectMapper.convertValue(obj, EmployeeDTO.class);
-                System.out.println("Поток выполнения consumeEmployee: " + Thread.currentThread().getName());
-                handle(employeeDTO, methodsKafka);
-
-        }
+    public String getClassName() {
+        return EmployeeDTO.class.getSimpleName();
     }
 
 
 }
+
+
+
 

@@ -16,7 +16,9 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
-public class Consume {
+public class
+
+Consume {
     private final List<KafkaConsumerStrategy> strategies;
     private final ObjectMapper mapper;
 

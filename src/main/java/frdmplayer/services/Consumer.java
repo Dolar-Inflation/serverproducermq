@@ -37,7 +37,8 @@ public class Consumer {
         this.updateDataService = updateDataService;
         this.consume = consume;
     }
-//TODO Реализовать паттерн стратегия со стороны консьюмера
+
+    //TODO Реализовать паттерн стратегия со стороны консьюмера
     @Async
     @KafkaHandler
     CompletableFuture<Void> consumer(KafkaObertka obertka) throws JsonProcessingException {
@@ -51,7 +52,6 @@ public class Consumer {
         System.out.println("o.getPayload() = " + payload);
         System.out.println("methodsKafka = " + obertka.getMethodsKafka());
 
-//TODO ДОПИСАТЬ СТРАТЕГИИ ДЛЯ ВСЕХ DTO
 
 //        switch (className) {
 //            case "EmployeeDTO":
@@ -75,8 +75,9 @@ public class Consumer {
 //        }
 
 
-
         return consume.consume(payload, className, methodsKafka);
+    }
+}
 
 //        try {
 //            EmployeeDTO employeeDTO;
@@ -119,40 +120,40 @@ public class Consumer {
 //
 //        return CompletableFuture.completedFuture(null);
 //    }
-    }
-    public void handleEmployeeDTO(EmployeeDTO employeeDTO, MethodsKafka methodsKafka) {
-        switch (methodsKafka) {
-            case CREATE -> saveDataService.saveEmployeDTO(employeeDTO);
-            case DELETE -> deleteDataById.deleteEmployeeDataById(employeeDTO);
-
-
-
-        }
-
-
-    }
-    public void handlePhoneDTO (PhoneNumberDTO phoneNumberDTO, MethodsKafka methodsKafka){
-        switch (methodsKafka) {
-            case CREATE -> saveDataService.savePhoneNumberDTO(phoneNumberDTO);
-            case DELETE -> deleteDataById.deleteEmployeePhoneDataById(phoneNumberDTO);
-
-        }
-    }
-    public void handleEmployePhoneDTO(EmployePhoneDTO employePhoneDTO,MethodsKafka methodsKafka){
-        switch (methodsKafka) {
-            case CREATE -> saveDataService.saveEmployePhoneRelation(employePhoneDTO);
-            case DELETE -> deleteDataById.deleteRelationDataById(employePhoneDTO);
-
-        }
-
-
-    }
-    public void handleEmployePhoneFullDTO(EmployePhoneFullDTO employePhoneFullDTO,MethodsKafka methodsKafka ){
-        switch (methodsKafka) {
-            case PATCH -> updateDataService.updateData(employePhoneFullDTO);
-        }
-    }
-}
+//    }
+//    public void handleEmployeeDTO(EmployeeDTO employeeDTO, MethodsKafka methodsKafka) {
+//        switch (methodsKafka) {
+//            case CREATE -> saveDataService.saveEmployeDTO(employeeDTO);
+//            case DELETE -> deleteDataById.deleteEmployeeDataById(employeeDTO);
+//
+//
+//
+//        }
+//
+//
+//    }
+//    public void handlePhoneDTO (PhoneNumberDTO phoneNumberDTO, MethodsKafka methodsKafka){
+//        switch (methodsKafka) {
+//            case CREATE -> saveDataService.savePhoneNumberDTO(phoneNumberDTO);
+//            case DELETE -> deleteDataById.deleteEmployeePhoneDataById(phoneNumberDTO);
+//
+//        }
+//    }
+//    public void handleEmployePhoneDTO(EmployePhoneDTO employePhoneDTO,MethodsKafka methodsKafka){
+//        switch (methodsKafka) {
+//            case CREATE -> saveDataService.saveEmployePhoneRelation(employePhoneDTO);
+//            case DELETE -> deleteDataById.deleteRelationDataById(employePhoneDTO);
+//
+//        }
+//
+//
+//    }
+//    public void handleEmployePhoneFullDTO(EmployePhoneFullDTO employePhoneFullDTO,MethodsKafka methodsKafka ){
+//        switch (methodsKafka) {
+//            case PATCH -> updateDataService.updateData(employePhoneFullDTO);
+//        }
+//    }
+//}
 
 
 

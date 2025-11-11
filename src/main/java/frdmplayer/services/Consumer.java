@@ -2,6 +2,7 @@ package frdmplayer.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import frdmplayer.Configs.MultiThreadConfig;
 import frdmplayer.DTO.EmployePhoneDTO;
 import frdmplayer.DTO.EmployePhoneFullDTO;
 import frdmplayer.DTO.EmployeeDTO;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 
 @Service
 @KafkaListener(topics = "test-topic", groupId = "my-group")
@@ -27,18 +29,20 @@ public class Consumer {
     private final ObjectMapper objectMapper;
     private final UpdateDataService updateDataService;
     private final Consume consume;
+    private final MultiThreadConfig multiThreadConfig;
 
     @Autowired
-    public Consumer(SaveDataService saveDataService, DeleteDataById deleteDataById, ObjToJSON objToJSON, ObjectMapper objectMapper, UpdateDataService updateDataService, Consume consume) {
+    public Consumer(SaveDataService saveDataService, DeleteDataById deleteDataById, ObjToJSON objToJSON, ObjectMapper objectMapper, UpdateDataService updateDataService, Consume consume, MultiThreadConfig multiThreadConfig) {
         this.saveDataService = saveDataService;
         this.deleteDataById = deleteDataById;
         this.objToJSON = objToJSON;
         this.objectMapper = objectMapper;
         this.updateDataService = updateDataService;
         this.consume = consume;
+        this.multiThreadConfig = multiThreadConfig;
     }
 
-    //TODO Реализовать паттерн стратегия со стороны консьюмера
+
     @Async
     @KafkaHandler
     CompletableFuture<Void> consumer(KafkaObertka obertka) throws JsonProcessingException {
@@ -52,6 +56,13 @@ public class Consumer {
         System.out.println("o.getPayload() = " + payload);
         System.out.println("methodsKafka = " + obertka.getMethodsKafka());
 
+
+
+        return CompletableFuture.runAsync(()->{
+            consume.consume(payload, className, methodsKafka);
+        },multiThreadConfig.executorService());//причина не работы многопотока здесь скорее всего кроется в выполнении метода consume ассинхронно
+    }
+}
 
 //        switch (className) {
 //            case "EmployeeDTO":
@@ -67,7 +78,7 @@ public class Consumer {
 //                    EmployePhoneDTO empPhoneDTO = objectMapper.convertValue(payload, EmployePhoneDTO.class);
 //                    System.out.println("<UNK> <UNK> consumeEmployeePhone: " + Thread.currentThread().getName());
 //                    handleEmployePhoneDTO(empPhoneDTO, methodsKafka);
-//            case "EmployePhoneFullDTO": //TODO сообщение не приходит разобраться
+//            case "EmployePhoneFullDTO":
 //                EmployePhoneFullDTO employePhoneFullDTO=objectMapper.convertValue(payload, EmployePhoneFullDTO.class);
 //                System.out.println("<UNK> <UNK> consumeEmployeePhoneFull: " + Thread.currentThread().getName());
 //                handleEmployePhoneFullDTO(employePhoneFullDTO, methodsKafka);
@@ -75,9 +86,7 @@ public class Consumer {
 //        }
 
 
-        return consume.consume(payload, className, methodsKafka);
-    }
-}
+
 
 //        try {
 //            EmployeeDTO employeeDTO;

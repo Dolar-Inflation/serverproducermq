@@ -1,16 +1,19 @@
-package frdmplayer.services;
+package frdmplayer.Strategies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import frdmplayer.DTO.EmployeeDTO;
+import frdmplayer.DTO.EmployePhoneFullDTO;
 import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
+import frdmplayer.services.DeleteDataById;
+import frdmplayer.services.SaveDataService;
+import frdmplayer.services.UpdateDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
+public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrategy {
     private final SaveDataService saveDataService;
     private final DeleteDataById deleteDataById;
     private final ObjToJSON objToJSON;
@@ -18,23 +21,15 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
     private final UpdateDataService updateDataService;
 
 
-
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
-            case CREATE -> saveDataService.saveEmployeDTO((EmployeeDTO) obj);
-            case DELETE -> deleteDataById.deleteEmployeeDataById((EmployeeDTO) obj);
+            case PATCH -> updateDataService.updateData((EmployePhoneFullDTO) obj);
         }
     }
 
     @Override
     public String getClassName() {
-        return EmployeeDTO.class.getSimpleName();
+        return EmployePhoneFullDTO.class.getSimpleName();
     }
-
-
 }
-
-
-
-

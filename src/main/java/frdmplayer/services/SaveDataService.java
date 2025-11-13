@@ -36,7 +36,6 @@ public class SaveDataService {
     @Transactional
     public void saveEmployeDTO(EmployeeDTO employeeDTO){
         Employee employe = entityToDTO.convertToEmployeDTO(employeeDTO);
-        System.out.println("данные сохранены"+employe);
         repository.save(employe);
         System.out.println(repository.findById(employe.getId()));
     }

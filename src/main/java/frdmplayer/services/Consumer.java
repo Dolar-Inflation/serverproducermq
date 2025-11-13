@@ -43,7 +43,7 @@ public class Consumer {
     }
 
 
-    @Async
+//    @Async
     @KafkaHandler
     CompletableFuture<Void> consumer(KafkaObertka obertka) throws JsonProcessingException {
         System.out.println("OBERTKA = " + (obertka == null ? "null" : obertka.getClass().getName()));

@@ -1,10 +1,13 @@
-package frdmplayer.services;
+package frdmplayer.Strategies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import frdmplayer.DTO.EmployePhoneDTO;
 import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
+import frdmplayer.services.DeleteDataById;
+import frdmplayer.services.SaveDataService;
+import frdmplayer.services.UpdateDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

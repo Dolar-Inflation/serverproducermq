@@ -4,30 +4,31 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import frdmplayer.DTO.*;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.MapEntity.EntityToDTO;
+import frdmplayer.ObjToJSON.ObjToJSON;
 import frdmplayer.Repository.EmployesphoneRepository;
 import frdmplayer.services.GetDbInfo;
-//import frdmplayer.services.KafkaProduser;
-import frdmplayer.services.KafkaProduser;
-//import frdmplayer.services.Producer;
 import frdmplayer.services.Producer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+
 public class KafkaController {
     @Autowired
-    private KafkaProduser producerService;
+
     private GetDbInfo getDbInfo;
     private EmployesphoneRepository empPhoneRepository;
     private EntityToDTO entityToDTO;
     private UpdateDto updateDto;
     private Producer producer;
+    private ObjToJSON objToJSON;
 
-    public KafkaController(KafkaProduser producerService, GetDbInfo getDbInfo, EmployesphoneRepository empPhoneRepository, EntityToDTO entityToDTO,Producer producer) {
-        this.producerService = producerService;
+    public KafkaController( GetDbInfo getDbInfo, EmployesphoneRepository empPhoneRepository, EntityToDTO entityToDTO,Producer producer,ObjToJSON objToJSON) {
 
+        this.objToJSON = objToJSON;
         this.getDbInfo = getDbInfo;
         this.empPhoneRepository = empPhoneRepository;
         this.entityToDTO = entityToDTO;
@@ -39,6 +40,7 @@ public class KafkaController {
 //        producerService.sendMessage(message);
 //        producer.sendCreateEmployee(message);
 //        producer.send(message);
+
         producer.send(message,MethodsKafka.CREATE);
         return message;
     }

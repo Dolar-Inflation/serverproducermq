@@ -6,25 +6,28 @@ import frdmplayer.Interfaces.KafkaProducerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Semaphore;
 
 @Service
 @RequiredArgsConstructor
 public class Producer {
 
-
+@Autowired
     private final List<KafkaProducerStrategy> strategies;
     private final ExecutorService executorService;
     private final ObjToJSON objToJSON;
+    private final Semaphore semaphore;
 
 
-//    @Async
-    public CompletableFuture<Void>send(Object dto , MethodsKafka methodsKafka) throws JsonProcessingException {
+
+    public CompletableFuture<Void>send(Object dto , MethodsKafka methodsKafka)  {
 
         String payloadClassName = dto.getClass().getSimpleName();
         for(KafkaProducerStrategy strategy : strategies) {
@@ -34,8 +37,16 @@ public class Producer {
                 return CompletableFuture.runAsync(()->{
                     try {
 
-                        sendWithStrategy(strategy,dto,methodsKafka,payloadClassName);
-                    } catch (JsonProcessingException e) {
+                        semaphore.acquire();
+                        try {
+                            sendWithStrategy(strategy, dto, methodsKafka, payloadClassName);
+                            Thread.sleep(2000);
+                            System.out.println(Thread.currentThread().getName() + " вошёл в критическую секцию");
+                        }finally {
+                            semaphore.release();
+                            System.out.println(Thread.currentThread().getName() + " вышел из неё");
+                        }
+                    } catch (JsonProcessingException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     System.out.println(Thread.currentThread().getName() + ": Отправил : " + dto);

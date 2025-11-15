@@ -22,7 +22,7 @@ public class PhoneTableLockStrategy implements ReentrantLockStrategy {
 
     @Override
     public void unlock(String tableName) {
-        if(!"employee".equalsIgnoreCase(tableName)) {
+        if(!"phone".equalsIgnoreCase(tableName)) {
             throw new IllegalArgumentException("Table name must be either \"phone\"");
         }
         System.out.println("Unlocking phone table " + tableName);

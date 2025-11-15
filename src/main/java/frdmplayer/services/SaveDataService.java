@@ -56,7 +56,7 @@ public class SaveDataService {
 
             Phone phonenumber = entityToDTO.convertToPhoneNumberDTO(phoneNumberDTO);
             numberRepository.save(phonenumber);
-            repository.flush();
+            numberRepository.flush();
         }finally {
             lockTableService.unlockTable("phone");
         }
@@ -65,7 +65,8 @@ public class SaveDataService {
     public void saveEmployePhoneRelation(EmployePhoneDTO employePhoneDTO){
         Employeephonerelation employesphone = entityToDTO.convertToEmployeePhoneDTO(employePhoneDTO);
         employesphoneRepository.save(employesphone);
-        repository.flush();
+
+
     }
     
 

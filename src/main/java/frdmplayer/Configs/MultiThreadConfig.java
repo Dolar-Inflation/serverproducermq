@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 public class MultiThreadConfig {
     @Bean
     public ExecutorService executorService() {
-        BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<Runnable>(8);
+        BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<Runnable>(20);
 
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10,10,10000, TimeUnit.MILLISECONDS, workQueue,new ThreadPoolExecutor.CallerRunsPolicy());
 

@@ -60,7 +60,8 @@ public class Consumer {
 
         return CompletableFuture.runAsync(()->{
             consume.consume(payload, className, methodsKafka);
-        },multiThreadConfig.executorService());//причина не работы многопотока здесь скорее всего кроется в выполнении метода consume ассинхронно
+            System.out.println("Консьюмер сработал");
+        },multiThreadConfig.executorService());
     }
 }
 

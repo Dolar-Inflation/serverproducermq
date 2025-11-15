@@ -18,9 +18,8 @@ import java.util.concurrent.ExecutorService;
 
 @Service
 @RequiredArgsConstructor
-public class
 
-Consume {
+public class Consume {
     private final List<KafkaConsumerStrategy> strategies;
     private final ObjectMapper mapper;
 

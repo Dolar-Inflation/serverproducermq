@@ -22,9 +22,10 @@ public class SaveDataService {
     private final PhoneRepository phoneRepository;
     private final EmployesphoneRepository employesphoneRepository;
     private final EntityToDTO entityToDTO;
+    private final LockTableService lockTableService;
 
     @Autowired
-    public SaveDataService(EmployeeRepository repository, PhoneRepository numberRepository, PhoneRepository phoneRepository, EmployeeRepository employeeRepository, EmployesphoneRepository sphoneRepository, EmployesphoneRepository employesphoneRepository, EntityToDTO entityToDTO) {
+    public SaveDataService(EmployeeRepository repository, PhoneRepository numberRepository, PhoneRepository phoneRepository,  EmployesphoneRepository employesphoneRepository, EntityToDTO entityToDTO, LockTableService lockTableService) {
         this.repository = repository;
         this.numberRepository = numberRepository;
         this.phoneRepository = phoneRepository;
@@ -32,22 +33,39 @@ public class SaveDataService {
         this.entityToDTO = entityToDTO;
 
 
+        this.lockTableService = lockTableService;
     }
     @Transactional
     public void saveEmployeDTO(EmployeeDTO employeeDTO){
-        Employee employe = entityToDTO.convertToEmployeDTO(employeeDTO);
-        repository.save(employe);
-        System.out.println(repository.findById(employe.getId()));
+        lockTableService.lockTable("employee");
+        try {
+            Employee employe = entityToDTO.convertToEmployeDTO(employeeDTO);
+            repository.save(employe);
+            repository.flush();
+            System.out.println("Saved employee with ID: " + repository.findById(employe.getId()));
+            System.out.println(repository.findById(employe.getId()));
+        } finally {
+            lockTableService.unlockTable("employee");
+        }
     }
 
     public void savePhoneNumberDTO(PhoneNumberDTO phoneNumberDTO){
-        Phone phonenumber = entityToDTO.convertToPhoneNumberDTO(phoneNumberDTO);
-        numberRepository.save(phonenumber);
+        lockTableService.lockTable("phone");
+        try {
+
+
+            Phone phonenumber = entityToDTO.convertToPhoneNumberDTO(phoneNumberDTO);
+            numberRepository.save(phonenumber);
+            repository.flush();
+        }finally {
+            lockTableService.unlockTable("phone");
+        }
     }
 
     public void saveEmployePhoneRelation(EmployePhoneDTO employePhoneDTO){
         Employeephonerelation employesphone = entityToDTO.convertToEmployeePhoneDTO(employePhoneDTO);
         employesphoneRepository.save(employesphone);
+        repository.flush();
     }
     
 

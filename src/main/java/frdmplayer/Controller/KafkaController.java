@@ -67,10 +67,7 @@ public class KafkaController {
 ////        getDbInfo.getDbInfo(message);
 //        return "db info " + message;
 //    }
-    //TODO я еблан забыл что с сообщением передаётся метод
-    // а нахуй это надо в теории же можно будет просто контроллер на стороне консьюмера написать и просто получать данные т.к консьюмер имеет связь с бд
-    // а вдруг надо если продюсер отправляет сообщение о создании?
-    // не не надо удаление да а на чтение данных не думаю
+
     @GetMapping("/")
     public ResponseEntity<String> getAllEmployees() {
         EmployePhoneFullDTO dull = new EmployePhoneFullDTO();
@@ -79,7 +76,7 @@ public class KafkaController {
 
         return ResponseEntity.ok("READALL");
     }
-    //TODO я еблан забыл что с сообщением передаётся метод нахуй я это сделал?)
+
 //    @GetMapping("/{id}")
 //    public List<EmployePhoneFullDTO> getEmployeeById(@PathVariable int id) {
 //        List<EmployePhoneFullDTO> employeeData = getDbInfo.getEmployeeById(id);

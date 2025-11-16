@@ -91,6 +91,29 @@ public class EntityToDTO {
 
         return employePhoneFullDTO;
     }
+    public EmployePhoneFullDTO convertToAllData(Employeephonerelation employeephonerelation) {
+        EmployePhoneFullDTO dto = new EmployePhoneFullDTO();
+
+        // переносим id самой связи
+        dto.setId(employeephonerelation.getId());
+
+        Employee employee = employeephonerelation.getEmployee();
+        if (employee != null) {
+            dto.setEmployeId(employee.getId());
+            dto.setFio(employee.getFio());
+            dto.setAddress(employee.getAddress());
+            dto.setPosition(employee.getPosition());
+        }
+
+        Phone phone = employeephonerelation.getPhone();
+        if (phone != null) {
+            dto.setPhoneId(phone.getId());
+            dto.setType(phone.getType());
+            dto.setNumber(phone.getNumber());
+        }
+
+        return dto;
+    }
 }
 
 

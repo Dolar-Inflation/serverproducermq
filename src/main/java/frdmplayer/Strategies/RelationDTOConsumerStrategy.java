@@ -25,6 +25,7 @@ public class RelationDTOConsumerStrategy implements KafkaConsumerStrategy {
         switch (methodsKafka){
             case CREATE -> saveDataService.saveEmployePhoneRelation((EmployePhoneDTO) obj);
             case DELETE -> deleteDataById.deleteRelationDataById((EmployePhoneDTO) obj);
+
         }
     }
 

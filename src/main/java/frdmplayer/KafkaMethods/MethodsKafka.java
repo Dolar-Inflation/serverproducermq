@@ -8,6 +8,7 @@ public enum MethodsKafka {
     UPDATE,
     DELETE,
     PATCH,
+    READALL,
 }
 
 

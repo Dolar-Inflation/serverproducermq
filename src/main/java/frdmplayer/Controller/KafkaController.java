@@ -10,8 +10,10 @@ import frdmplayer.services.GetDbInfo;
 import frdmplayer.services.Producer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -61,19 +63,22 @@ public class KafkaController {
 
 //        @GetMapping("/")
 //    public String DbInfo(EmployePhoneDTO message) throws JsonProcessingException {
-//        getDbInfo.getDbInfo(message);
+//        producer.send(message,MethodsKafka.READALL);
+////        getDbInfo.getDbInfo(message);
 //        return "db info " + message;
 //    }
     //TODO я еблан забыл что с сообщением передаётся метод
     // а нахуй это надо в теории же можно будет просто контроллер на стороне консьюмера написать и просто получать данные т.к консьюмер имеет связь с бд
     // а вдруг надо если продюсер отправляет сообщение о создании?
     // не не надо удаление да а на чтение данных не думаю
-//    @GetMapping("/")
-//    public List<EmployePhoneFullDTO> getAllEmployees() {
-//        List<EmployePhoneFullDTO> employeesData = getDbInfo.getAllRelations();
-//        System.out.println(employeesData);
-//        return employeesData;
-//    }
+    @GetMapping("/")
+    public ResponseEntity<String> getAllEmployees() {
+        EmployePhoneFullDTO dull = new EmployePhoneFullDTO();
+        producer.send(dull,MethodsKafka.READALL);
+
+
+        return ResponseEntity.ok("READALL");
+    }
     //TODO я еблан забыл что с сообщением передаётся метод нахуй я это сделал?)
 //    @GetMapping("/{id}")
 //    public List<EmployePhoneFullDTO> getEmployeeById(@PathVariable int id) {

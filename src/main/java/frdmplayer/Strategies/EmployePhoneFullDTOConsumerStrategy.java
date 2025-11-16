@@ -6,6 +6,7 @@ import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 import frdmplayer.services.DeleteDataById;
+import frdmplayer.services.GetDbInfo;
 import frdmplayer.services.SaveDataService;
 import frdmplayer.services.UpdateDataService;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +20,13 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
     private final UpdateDataService updateDataService;
+    private final GetDbInfo getDbInfo;
 
 
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
+            case READALL -> getDbInfo.getAllRelations();
             case PATCH -> updateDataService.updateData((EmployePhoneFullDTO) obj);
         }
     }

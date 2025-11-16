@@ -63,8 +63,15 @@ public class SaveDataService {
     }
 
     public void saveEmployePhoneRelation(EmployePhoneDTO employePhoneDTO){
-        Employeephonerelation employesphone = entityToDTO.convertToEmployeePhoneDTO(employePhoneDTO);
-        employesphoneRepository.save(employesphone);
+        lockTableService.lockTable("employeephonerelation");
+        try {
+
+
+            Employeephonerelation employesphone = entityToDTO.convertToEmployeePhoneDTO(employePhoneDTO);
+            employesphoneRepository.save(employesphone);
+        }finally {
+            lockTableService.unlockTable("employeephonerelation");
+        }
 
 
     }

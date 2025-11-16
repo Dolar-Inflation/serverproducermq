@@ -41,10 +41,15 @@ public class Producer {
                         try {
                             sendWithStrategy(strategy, dto, methodsKafka, payloadClassName);
                             Thread.sleep(2000);
-                            System.out.println(Thread.currentThread().getName() + " вошёл в критическую секцию");
+                            if (semaphore.availablePermits() > 0) {
+                                System.out.println(Thread.currentThread().getName() + " вошёл в критическую секцию");
+                            }
+
                         }finally {
                             semaphore.release();
-                            System.out.println(Thread.currentThread().getName() + " вышел из неё");
+                            if (semaphore.availablePermits() < 0) {
+                                System.out.println(Thread.currentThread().getName() + " вышел из неё");
+                            }
                         }
                     } catch (JsonProcessingException | InterruptedException e) {
                         throw new RuntimeException(e);

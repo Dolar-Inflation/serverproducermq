@@ -41,13 +41,13 @@ public class Producer {
                         try {
                             sendWithStrategy(strategy, dto, methodsKafka, payloadClassName);
                             Thread.sleep(2000);
-                            if (semaphore.availablePermits() > 0) {
+                            if (semaphore.availablePermits() <= 0) {
                                 System.out.println(Thread.currentThread().getName() + " вошёл в критическую секцию");
                             }
 
                         }finally {
                             semaphore.release();
-                            if (semaphore.availablePermits() < 0) {
+                            if (semaphore.availablePermits() > 0) {
                                 System.out.println(Thread.currentThread().getName() + " вышел из неё");
                             }
                         }

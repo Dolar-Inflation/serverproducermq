@@ -34,7 +34,7 @@ public class GetDbInfo {
     public List<EmployePhoneFullDTO>  getAllRelations(){
 
         List<EmployePhoneFullDTO> result = employesphoneRepository.findAll().stream()
-                .map(entityToDTO::convertToAllData)
+                .map(entityToDTO::convertToEmployeePhoneFullDTO)
 //                .map(ObjToJSON::convertToJson)
 //                .forEach(objToJSON::convertToJson)
 
@@ -56,17 +56,39 @@ public class GetDbInfo {
     }
 
     public List<EmployePhoneFullDTO>  getEmployeeById(Integer id){
-        if (employesphoneRepository.findById(id).isPresent()) {
-            return employesphoneRepository.findById(id)
-                    .map(entityToDTO::convertToEmployeePhoneFullDTO)
+//         employesphoneRepository.findById(id).isPresent();
+            List<EmployePhoneFullDTO> result = employesphoneRepository.findById(id)
+//            return employesphoneRepository.findById(id)
+                    .map(entityToDTO::convertToAllData)
                     .stream().collect(Collectors.toList());
+            result.forEach(dto -> {
+                try {
+                    log.info("employee by id",objectMapper.writeValueAsString(dto));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            return result;
+
+
+
         }
-        else {
-            throw new EntityNotFoundException("Employee id not found");
+public EmployePhoneFullDTO GetById(Integer id){
+    List<EmployePhoneFullDTO> result = employesphoneRepository.findById(id).stream()
+            .map(entityToDTO::MapDataThroughId)
+            .collect(Collectors.toList());
+    result.forEach(dto -> {
+        try {
+            System.out.println(objectMapper.writeValueAsString(dto));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
+    });
+    return result.stream().findFirst().get();
+}
+
 
 //               .orElseThrow(() -> new EntityNotFoundException("no id"));
-
 
 
 
@@ -81,5 +103,5 @@ public class GetDbInfo {
 ////
 //  }
 
-}
+
 

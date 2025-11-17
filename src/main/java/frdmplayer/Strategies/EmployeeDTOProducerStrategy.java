@@ -43,6 +43,10 @@ public class EmployeeDTOProducerStrategy implements KafkaProducerStrategy {
             System.out.println(dto);
 
         }
+        public void sendId(Integer id) {
+            kafkaTemplate.send(TOPIC,id);
+            System.out.println(id);
+        }
 }
 
 

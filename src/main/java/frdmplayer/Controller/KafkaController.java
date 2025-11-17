@@ -77,13 +77,16 @@ public class KafkaController {
         return ResponseEntity.ok("READALL");
     }
 
-//    @GetMapping("/{id}")
-//    public List<EmployePhoneFullDTO> getEmployeeById(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public EmployePhoneFullDTO getEmployeeById(@PathVariable Integer id) {
 //        List<EmployePhoneFullDTO> employeeData = getDbInfo.getEmployeeById(id);
 //        System.out.println(employeeData);
-//        return employeeData;
-//
-//    }
+        EmployePhoneFullDTO dull = new EmployePhoneFullDTO();
+        dull.setId(id);
+        producer.send(dull,MethodsKafka.READ);
+        return dull;
+
+    }
 
     @DeleteMapping("/relation/{id}")
     public EmployePhoneDTO deleteEmployeeRelation(@PathVariable Integer id) throws JsonProcessingException {
@@ -91,7 +94,7 @@ public class KafkaController {
         employePhoneDTO.setId(id);
         producer.send(employePhoneDTO,MethodsKafka.DELETE);
 //        producerService.sendFullEmployePhoneDeleteByID(employePhoneFullDTO);
-        System.out.println("employee Relation data deleted " + employePhoneDTO);
+        System.out.println("employee Relation data for deleting sent to kafka " + employePhoneDTO);
         return employePhoneDTO;
     }
 //    }

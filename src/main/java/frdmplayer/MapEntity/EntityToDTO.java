@@ -74,7 +74,7 @@ public class EntityToDTO {
     public EmployePhoneFullDTO convertToEmployeePhoneFullDTO(Employeephonerelation employeephonerelation) {
         EmployePhoneFullDTO employePhoneFullDTO = new EmployePhoneFullDTO();
 
-//        employePhoneFullDTO.setId(employeephonerelation.getId());
+        employePhoneFullDTO.setId(employeephonerelation.getId());
 
         Employee employee = employeephonerelation.getEmployee();
 
@@ -113,6 +113,27 @@ public class EntityToDTO {
         }
 
         return dto;
+    }
+    public EmployePhoneFullDTO MapDataThroughId(Employeephonerelation employeephonerelation) {
+        EmployePhoneFullDTO dto = new EmployePhoneFullDTO();
+        dto.setId(employeephonerelation.getEmployee().getId());
+
+        Employee employee = employeephonerelation.getEmployee();
+        if (employee != null) {
+            dto.setEmployeId(employee.getId());
+            dto.setFio(employee.getFio());
+            dto.setAddress(employee.getAddress());
+            dto.setPosition(employee.getPosition());
+        }
+
+        Phone phone = employeephonerelation.getPhone();
+        if (phone != null) {
+            dto.setPhoneId(phone.getId());
+            dto.setType(phone.getType());
+            dto.setNumber(phone.getNumber());
+        }
+        return dto;
+
     }
 }
 

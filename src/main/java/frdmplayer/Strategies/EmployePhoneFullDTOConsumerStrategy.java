@@ -12,6 +12,10 @@ import frdmplayer.services.UpdateDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+import static org.apache.kafka.common.requests.FetchMetadata.log;
+
 @Component
 @RequiredArgsConstructor
 public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrategy {
@@ -23,10 +27,18 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
     private final GetDbInfo getDbInfo;
 
 
+
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
             case READALL -> getDbInfo.getAllRelations();
+
+
+
+                        case READ -> {
+                EmployePhoneFullDTO dto = (EmployePhoneFullDTO) obj;
+                getDbInfo.GetById(dto.getId());
+            }//этот метод ищет по таблице relation
             case PATCH -> updateDataService.updateData((EmployePhoneFullDTO) obj);
         }
     }

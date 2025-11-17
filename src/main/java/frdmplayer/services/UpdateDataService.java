@@ -1,14 +1,12 @@
 package frdmplayer.services;
 
 import frdmplayer.DTO.EmployePhoneFullDTO;
-import frdmplayer.DTO.UpdateDto;
 import frdmplayer.Entity.Employee;
 import frdmplayer.Entity.Employeephonerelation;
 import frdmplayer.Entity.Phone;
 import frdmplayer.Repository.EmployeeRepository;
 import frdmplayer.Repository.EmployesphoneRepository;
 import frdmplayer.Repository.PhoneRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

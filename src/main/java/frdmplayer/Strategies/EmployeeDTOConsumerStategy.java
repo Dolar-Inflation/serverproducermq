@@ -1,6 +1,7 @@
 package frdmplayer.Strategies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import frdmplayer.CrudTemplate.EmployeeCrudTemplate;
 import frdmplayer.DTO.EmployeeDTO;
 import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
@@ -19,6 +20,7 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
     private final UpdateDataService updateDataService;
+    private final EmployeeCrudTemplate employeeCrudTemplate;
 
 
 
@@ -26,7 +28,8 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
             case CREATE -> saveDataService.saveEmployeDTO((EmployeeDTO) obj);
-            case DELETE -> deleteDataById.deleteEmployeeDataById((EmployeeDTO) obj);
+            case DELETE -> employeeCrudTemplate.deleteById(((EmployeeDTO) obj).getId());
+            case READALL -> employeeCrudTemplate.readAll();
         }
     }
 

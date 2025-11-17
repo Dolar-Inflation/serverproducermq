@@ -24,7 +24,7 @@ public class KafkaController {
     private GetDbInfo getDbInfo;
     private EmployesphoneRepository empPhoneRepository;
     private EntityToDTO entityToDTO;
-    private UpdateDto updateDto;
+
     private Producer producer;
     private ObjToJSON objToJSON;
 
@@ -122,6 +122,13 @@ public class KafkaController {
     producer.send(message,MethodsKafka.PATCH);
         System.out.println("employee data sent " + message);
         return message;
+
+}
+@GetMapping("/employee/data")
+    public EmployeeDTO employeeData() throws JsonProcessingException {
+        EmployeeDTO dull=new EmployeeDTO();
+        producer.send(dull,MethodsKafka.READALL);
+        return dull;
 
 }
 

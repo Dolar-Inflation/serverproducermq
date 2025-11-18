@@ -1,41 +1,47 @@
-package frdmplayer.Strategies;
+package frdmplayer.Strategies.Consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import frdmplayer.DTO.PhoneNumberDTO;
+import frdmplayer.DTO.EmployePhoneFullDTO;
 import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
-import frdmplayer.services.DeleteDataById;
-import frdmplayer.services.SaveDataService;
+
+import frdmplayer.services.GetDbInfo;
+
 import frdmplayer.services.UpdateDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PhoneDTOConsumerStrategy implements KafkaConsumerStrategy {
+public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrategy {
 
-    private final SaveDataService saveDataService;
-    private final DeleteDataById deleteDataById;
+
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
     private final UpdateDataService updateDataService;
+    private final GetDbInfo getDbInfo;
 
 
 
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
-            case CREATE -> saveDataService.savePhoneNumberDTO((PhoneNumberDTO) obj);
-            case DELETE -> deleteDataById.deleteEmployeePhoneDataById((PhoneNumberDTO) obj);
+            case READALL -> getDbInfo.getAllRelations();
+
+
+
+                        case READ -> {
+                EmployePhoneFullDTO dto = (EmployePhoneFullDTO) obj;
+                getDbInfo.GetById(dto.getId());
+            }//этот метод ищет по таблице relation
+            case PATCH -> updateDataService.updateData((EmployePhoneFullDTO) obj);
+
         }
     }
 
     @Override
     public String getClassName() {
-        return PhoneNumberDTO.class.getSimpleName();
+        return EmployePhoneFullDTO.class.getSimpleName();
     }
-
-
 }
-

@@ -23,7 +23,7 @@ public class Phone {
     @Column(name = "type", nullable = false, length = Integer.MAX_VALUE)
     private String type;
 
-    @OneToMany(mappedBy = "phone")
+    @OneToMany(mappedBy = "phone", cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Employeephonerelation> employeephonerelations = new LinkedHashSet<>();
 
 }

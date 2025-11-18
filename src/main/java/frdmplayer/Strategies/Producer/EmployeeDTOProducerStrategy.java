@@ -1,4 +1,4 @@
-package frdmplayer.Strategies;
+package frdmplayer.Strategies.Producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import frdmplayer.DTO.EmployeeDTO;

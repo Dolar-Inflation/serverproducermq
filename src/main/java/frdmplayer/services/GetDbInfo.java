@@ -55,24 +55,24 @@ public class GetDbInfo {
 
     }
 
-    public List<EmployePhoneFullDTO>  getEmployeeById(Integer id){
-//         employesphoneRepository.findById(id).isPresent();
-            List<EmployePhoneFullDTO> result = employesphoneRepository.findById(id)
-//            return employesphoneRepository.findById(id)
-                    .map(entityToDTO::convertToAllData)
-                    .stream().collect(Collectors.toList());
-            result.forEach(dto -> {
-                try {
-                    log.info("employee by id",objectMapper.writeValueAsString(dto));
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            return result;
-
-
-
-        }
+//    public List<EmployePhoneFullDTO>  getEmployeeById(Integer id){
+////         employesphoneRepository.findById(id).isPresent();
+//            List<EmployePhoneFullDTO> result = employesphoneRepository.findById(id)
+////            return employesphoneRepository.findById(id)
+//                    .map(entityToDTO::convertToAllData)
+//                    .stream().collect(Collectors.toList());
+//            result.forEach(dto -> {
+//                try {
+//                    log.info("employee by id",objectMapper.writeValueAsString(dto));
+//                } catch (JsonProcessingException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            return result;
+//
+//
+//
+//        }
 public EmployePhoneFullDTO GetById(Integer id){
     List<EmployePhoneFullDTO> result = employesphoneRepository.findById(id).stream()
             .map(entityToDTO::MapDataThroughId)

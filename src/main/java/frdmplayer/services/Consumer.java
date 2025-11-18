@@ -23,8 +23,7 @@ import java.util.concurrent.ExecutorService;
 @Service
 @KafkaListener(topics = "test-topic", groupId = "my-group")
 public class Consumer {
-    private final SaveDataService saveDataService;
-    private final DeleteDataById deleteDataById;
+
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
     private final UpdateDataService updateDataService;
@@ -32,9 +31,9 @@ public class Consumer {
     private final MultiThreadConfig multiThreadConfig;
 
     @Autowired
-    public Consumer(SaveDataService saveDataService, DeleteDataById deleteDataById, ObjToJSON objToJSON, ObjectMapper objectMapper, UpdateDataService updateDataService, Consume consume, MultiThreadConfig multiThreadConfig) {
-        this.saveDataService = saveDataService;
-        this.deleteDataById = deleteDataById;
+    public Consumer( ObjToJSON objToJSON, ObjectMapper objectMapper, UpdateDataService updateDataService, Consume consume, MultiThreadConfig multiThreadConfig) {
+
+
         this.objToJSON = objToJSON;
         this.objectMapper = objectMapper;
         this.updateDataService = updateDataService;

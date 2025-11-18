@@ -1,7 +1,9 @@
 package frdmplayer.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
@@ -11,6 +13,8 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "employee")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +32,6 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Employeephonerelation> employeephonerelations = new LinkedHashSet<>();
+
 
 }

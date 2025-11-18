@@ -1,4 +1,4 @@
-package frdmplayer.Strategies;
+package frdmplayer.Strategies.TableThreadLock;
 
 import frdmplayer.Interfaces.ReentrantLockStrategy;
 import org.springframework.stereotype.Service;

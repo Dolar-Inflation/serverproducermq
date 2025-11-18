@@ -1,4 +1,4 @@
-package frdmplayer.Strategies;
+package frdmplayer.Strategies.Producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import frdmplayer.DTO.EmployePhoneFullDTO;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EmployePhoneFullDTOStrategy implements KafkaProducerStrategy {
+public class EmployePhoneFullDTOProducerStrategy implements KafkaProducerStrategy {
     private final KafkaTemplate<String,Object> kafkaTemplate;
     private final ObjToJSON objToJSON;
     private static final String TOPIC = "test-topic";

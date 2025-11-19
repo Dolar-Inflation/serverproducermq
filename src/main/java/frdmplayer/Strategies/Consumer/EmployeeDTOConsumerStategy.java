@@ -32,18 +32,37 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
         switch (methodsKafka){
 //            case CREATE -> saveDataService.saveEmployeDTO((EmployeeDTO) obj);
             case CREATE -> employeeCrudTemplate.create((EmployeeDTO) obj);
-            case DELETE -> employeeCrudTemplate.deleteById(((EmployeeDTO) obj).getId());
+            case DELETE ->{
+                try {
+
+
+                    employeeCrudTemplate.deleteById(((EmployeeDTO) obj).getId());
+                }catch (Exception e){
+                    System.err.println(e.getMessage());
+                }
+            }
             case READALL -> {
                 List<EmployeeDTO> employeeDTOList= employeeCrudTemplate.readAll();
                 employeeDTOList.forEach(System.out::println);
             }
             case READ -> {
-                EmployeeDTO employeeDTO = employeeCrudTemplate.readById(((EmployeeDTO) obj).getId());
-            System.out.println(employeeDTO);
+                try {
+
+
+                    EmployeeDTO employeeDTO = employeeCrudTemplate.readById(((EmployeeDTO) obj).getId());
+                    System.out.println(employeeDTO);
+                }
+                catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
             }
             case PATCH -> {
-                EmployeeDTO employeeDTO = (EmployeeDTO) obj;
-                employeeCrudTemplate.patch(employeeDTO.getId(), employeeDTO);
+                try {
+                    EmployeeDTO employeeDTO = (EmployeeDTO) obj;
+                    employeeCrudTemplate.patch(employeeDTO.getId(), employeeDTO);
+                }catch (Exception e){
+                    System.err.println(e.getMessage());
+                }
             }
         }
     }

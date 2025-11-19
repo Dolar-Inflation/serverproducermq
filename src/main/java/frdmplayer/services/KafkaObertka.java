@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KafkaObertka {
-    private Object payload;
+public class KafkaObertka<T> {
+    private T payload;
     private MethodsKafka methodsKafka;
     String payloadClassName;
 }

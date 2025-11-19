@@ -55,5 +55,8 @@ public class Consume {
             default -> throw new IllegalArgumentException("Unknown class: " + className);
         };
     }
+    public List<KafkaConsumerStrategy> getStrategies() {
+        return strategies;
+    }
 
 }

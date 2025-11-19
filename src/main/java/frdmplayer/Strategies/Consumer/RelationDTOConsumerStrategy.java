@@ -27,18 +27,41 @@ public class RelationDTOConsumerStrategy implements KafkaConsumerStrategy {
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
             case CREATE -> relationCrudTemplate.create((EmployePhoneDTO)obj);
-            case DELETE -> relationCrudTemplate.deleteById(((EmployePhoneDTO)obj).getId());
+
+            case DELETE -> {
+                try {
+
+
+                    relationCrudTemplate.deleteById(((EmployePhoneDTO) obj).getId());
+                }
+                catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
             case READALL -> {
                 List<EmployePhoneDTO> employePhoneDTOS = relationCrudTemplate.readAll();
                 employePhoneDTOS.forEach(System.out::println);
             }
-            case READ -> { EmployePhoneDTO employePhoneDTO = relationCrudTemplate.readById(((EmployePhoneDTO)obj).getId());
-                System.out.println(employePhoneDTO);
+            case READ -> {
+                try {
 
+
+                    EmployePhoneDTO employePhoneDTO = relationCrudTemplate.readById(((EmployePhoneDTO) obj).getId());
+                    System.out.println(employePhoneDTO);
+                }
+                catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
             }
             case PATCH -> {
-                EmployePhoneDTO employePhoneDTO = (EmployePhoneDTO)obj;
-                relationCrudTemplate.patch(employePhoneDTO.getId(), employePhoneDTO);
+                try {
+
+                    EmployePhoneDTO employePhoneDTO = (EmployePhoneDTO) obj;
+                    relationCrudTemplate.patch(employePhoneDTO.getId(), employePhoneDTO);
+                }
+                catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
             }
 
         }

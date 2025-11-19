@@ -34,16 +34,29 @@ public class PhoneDTOConsumerStrategy implements KafkaConsumerStrategy {
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka) {
             case CREATE -> phoneCrudTemplate.create((PhoneNumberDTO) obj);
-            case DELETE -> phoneCrudTemplate.deleteById(((PhoneNumberDTO) obj).getId());
+            case DELETE ->{
+                try {
+                    phoneCrudTemplate.deleteById(((PhoneNumberDTO) obj).getId());
+                }
+                catch(EntityNotFoundException e) {
+                    System.err.println("Ошибка: " + e.getMessage());
+                }
+            }
             case READALL -> {
                 List<PhoneNumberDTO> phoneDTOList = phoneCrudTemplate.readAll();
                 phoneDTOList.forEach(System.out::println);
 
             }
             case PATCH -> {
-                PhoneNumberDTO phoneDTO = (PhoneNumberDTO) obj;
-                phoneCrudTemplate.patch(phoneDTO.getId(), phoneDTO);
+                try {
+                    PhoneNumberDTO phoneDTO = (PhoneNumberDTO) obj;
+                    phoneCrudTemplate.patch(phoneDTO.getId(), phoneDTO);
+                }
+                catch(EntityNotFoundException e) {
+                    System.err.println("<UNK>: " + e.getMessage());
+                }
             }
+
             case READ -> {
 //                PhoneNumberDTO phoneDTOList = phoneCrudTemplate.readById(((PhoneNumberDTO) obj).getId());
 //                System.out.println(phoneDTOList);

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "frdmplayer.Repository")
 @EntityScan(basePackages = "frdmplayer.Entity")
 
+
 public class ServerproducermqProducerRecordTry {
 
     public static void main(String[] args) {

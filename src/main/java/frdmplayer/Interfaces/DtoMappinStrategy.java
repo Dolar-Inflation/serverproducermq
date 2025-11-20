@@ -6,4 +6,4 @@ public interface DtoMappinStrategy <E,D>{
     boolean supports(Class<?> dtoClass);
     Class<E> getEntityClass();
     Class<D> getDtoClass();
-}//обавить метод для gettera только id
+}

@@ -22,7 +22,6 @@ public class Producer {
 @Autowired
     private final List<KafkaProducerStrategy> strategies;
     private final ExecutorService executorService;
-    private final ObjToJSON objToJSON;
     private final Semaphore semaphore;
 
 

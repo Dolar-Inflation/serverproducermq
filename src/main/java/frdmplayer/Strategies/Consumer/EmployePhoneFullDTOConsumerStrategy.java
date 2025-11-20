@@ -2,15 +2,19 @@ package frdmplayer.Strategies.Consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import frdmplayer.DTO.EmployePhoneFullDTO;
+import frdmplayer.DTO.EmployeeDTO;
 import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 
+import frdmplayer.Strategies.Mapping.FullTableCrudTemplate;
 import frdmplayer.services.GetDbInfo;
 
 import frdmplayer.services.UpdateDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -21,21 +25,47 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
     private final ObjectMapper objectMapper;
     private final UpdateDataService updateDataService;
     private final GetDbInfo getDbInfo;
+    private final FullTableCrudTemplate fullTableCrudTemplate;
 
 
 
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
-            case READALL -> getDbInfo.getAllRelations();
+//            case READALL -> getDbInfo.getAllRelations();
+            case READALL -> {
+                List<EmployePhoneFullDTO> employePhoneFullDTOList = fullTableCrudTemplate.readAll();
+                employePhoneFullDTOList.forEach(System.out::println);
+            }
 
 
 
                         case READ -> {
-                EmployePhoneFullDTO dto = (EmployePhoneFullDTO) obj;
-                getDbInfo.GetById(dto.getId());
+//                EmployePhoneFullDTO dto = (EmployePhoneFullDTO) obj;
+//                getDbInfo.GetById(dto.getId());
+                            try {
+
+
+                                EmployePhoneFullDTO employePhoneFullDTO = (EmployePhoneFullDTO) obj;
+                                EmployePhoneFullDTO found = fullTableCrudTemplate.readById(employePhoneFullDTO.getId());
+                                System.out.println("Из базы: " + found);
+                            }
+                            catch (Exception e) {
+                                System.err.println("<UNK> <UNK> <UNK> <UNK> <UNK> <UNK>");
+                            }
             }//этот метод ищет по таблице relation
-            case PATCH -> updateDataService.updateData((EmployePhoneFullDTO) obj);
+            case PATCH ->{
+                try {
+
+
+//                updateDataService.updateData((EmployePhoneFullDTO) obj);
+                    EmployePhoneFullDTO employePhoneFullDTO = (EmployePhoneFullDTO) obj;
+                    fullTableCrudTemplate.patch(employePhoneFullDTO.getId(), employePhoneFullDTO);
+                    System.out.println("patched: " + employePhoneFullDTO);
+                }catch (Exception e) {
+                    System.err.println("<UNK> <UNK> <UNK> <UNK>");
+                }
+            }
 
         }
     }

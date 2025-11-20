@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "frdmplayer")
+
 @EnableJpaRepositories(basePackages = "frdmplayer.Repository")
 @EntityScan(basePackages = "frdmplayer.Entity")
 

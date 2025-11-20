@@ -2,8 +2,10 @@ package frdmplayer.DTO;
 
 import frdmplayer.Entity.Employee;
 import frdmplayer.Entity.Phone;
+import lombok.Data;
 
 
+@Data
 
 public class EmployePhoneDTO {
     private Integer id;

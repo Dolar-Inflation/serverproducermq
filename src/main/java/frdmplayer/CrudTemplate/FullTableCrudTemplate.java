@@ -1,4 +1,4 @@
-package frdmplayer.Strategies.Mapping;
+package frdmplayer.CrudTemplate;
 
 
 import frdmplayer.Abstracts.CrudAbstractMethods;

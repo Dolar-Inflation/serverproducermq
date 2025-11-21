@@ -1,16 +1,15 @@
 package frdmplayer.Strategies.Consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import frdmplayer.CrudTemplate.FullTableCrudTemplate;
 import frdmplayer.DTO.EmployePhoneFullDTO;
 import frdmplayer.DTO.EmployeeDTO;
 import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 
-import frdmplayer.Strategies.Mapping.FullTableCrudTemplate;
-import frdmplayer.services.GetDbInfo;
 
-import frdmplayer.services.UpdateDataService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +22,7 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
 
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
-    private final UpdateDataService updateDataService;
-    private final GetDbInfo getDbInfo;
+
     private final FullTableCrudTemplate fullTableCrudTemplate;
 
 

@@ -1,22 +1,25 @@
 package frdmplayer.serverproducermq;
 
+import frdmplayer.Configs.AsyncConfig;
 import frdmplayer.DTO.EmployeeDTO;
+import frdmplayer.Interfaces.KafkaProducerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
+import frdmplayer.ObjToJSON.ObjToJSON;
+import frdmplayer.services.Consume;
 import frdmplayer.services.Consumer;
 import frdmplayer.services.Producer;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-
+import org.springframework.test.context.ActiveProfiles;
 import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @EmbeddedKafka(partitions = 1, topics = {"test-topic"})
 public class DeserializationTest {
     @Autowired

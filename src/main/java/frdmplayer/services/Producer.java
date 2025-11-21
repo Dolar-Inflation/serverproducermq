@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 
 @Service
@@ -26,14 +27,14 @@ public class Producer {
 
 
 
-    public CompletableFuture<Void>send(Object dto , MethodsKafka methodsKafka)  {
+    public Future send(Object dto , MethodsKafka methodsKafka)  {
 
         String payloadClassName = dto.getClass().getSimpleName();
         for(KafkaProducerStrategy strategy : strategies) {
             if(strategy.supports(dto, methodsKafka)) {
 
                 System.out.println(Thread.currentThread().getName() + ": Sent to Kafka");
-                return CompletableFuture.runAsync(()->{
+                return /*CompletableFuture.runAsync*/executorService.submit(() -> {
                     try {
 
                         semaphore.acquire();
@@ -55,7 +56,7 @@ public class Producer {
                     }
                     System.out.println(Thread.currentThread().getName() + ": Отправил : " + dto);
                     System.out.println(dto.getClass());
-                },executorService);
+                }/*,executorService*/);
             }
         }
         throw new RuntimeException("No support for KafkaProducerStrategy");

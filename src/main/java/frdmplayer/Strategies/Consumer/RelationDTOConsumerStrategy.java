@@ -7,7 +7,7 @@ import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 
-import frdmplayer.services.UpdateDataService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ public class RelationDTOConsumerStrategy implements KafkaConsumerStrategy {
 
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
-    private final UpdateDataService updateDataService;
+
     private final RelationCrudTemplate relationCrudTemplate;
 
     @Override

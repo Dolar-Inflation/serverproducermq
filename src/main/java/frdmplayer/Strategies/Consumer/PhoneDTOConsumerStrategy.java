@@ -9,7 +9,7 @@ import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 
 
-import frdmplayer.services.UpdateDataService;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ public class PhoneDTOConsumerStrategy implements KafkaConsumerStrategy {
 
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
-    private final UpdateDataService updateDataService;
+
     private final PhoneCrudTemplate phoneCrudTemplate;
 
 

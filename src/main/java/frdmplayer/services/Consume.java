@@ -26,7 +26,7 @@ public class Consume {
     @Autowired
     private ExecutorService executorService;
 
-//    @Async
+    @Async
     public CompletableFuture<Void> consume(Object obj,String objClassName, MethodsKafka methodsKafka) {
 //        String payloadClassName = obj.getClass().getName();
         for (KafkaConsumerStrategy strategy : strategies) {
@@ -39,7 +39,7 @@ public class Consume {
                     strategy.handle(typedPayload, methodsKafka);
                     System.out.println(Thread.currentThread().getName() + ": Принял : " + typedPayload);
 
-                },executorService);
+                }/*,executorService*/);
             }
         }
         System.out.println("нихуя не сработало consume");

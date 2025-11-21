@@ -3,10 +3,10 @@ package frdmplayer.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import frdmplayer.DTO.*;
 import frdmplayer.KafkaMethods.MethodsKafka;
-import frdmplayer.MapEntity.EntityToDTO;
+
 import frdmplayer.ObjToJSON.ObjToJSON;
 import frdmplayer.Repository.EmployesphoneRepository;
-import frdmplayer.services.GetDbInfo;
+
 import frdmplayer.services.Producer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +21,19 @@ import java.util.List;
 public class KafkaController {
     @Autowired
 
-    private GetDbInfo getDbInfo;
+
     private EmployesphoneRepository empPhoneRepository;
-    private EntityToDTO entityToDTO;
+
 
     private Producer producer;
     private ObjToJSON objToJSON;
 
-    public KafkaController( GetDbInfo getDbInfo, EmployesphoneRepository empPhoneRepository, EntityToDTO entityToDTO,Producer producer,ObjToJSON objToJSON) {
+    public KafkaController(  EmployesphoneRepository empPhoneRepository, Producer producer,ObjToJSON objToJSON) {
 
         this.objToJSON = objToJSON;
-        this.getDbInfo = getDbInfo;
+
         this.empPhoneRepository = empPhoneRepository;
-        this.entityToDTO = entityToDTO;
+
         this.producer = producer;
     }
         //маппинги для работы с таблицей employee

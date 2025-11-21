@@ -26,24 +26,24 @@ public class Consumer {
 
     private final ObjToJSON objToJSON;
     private final ObjectMapper objectMapper;
-    private final UpdateDataService updateDataService;
+
     private final Consume consume;
     private final MultiThreadConfig multiThreadConfig;
     public Object consumedPayload;
 
     @Autowired
-    public Consumer( ObjToJSON objToJSON, ObjectMapper objectMapper, UpdateDataService updateDataService, Consume consume, MultiThreadConfig multiThreadConfig) {
+    public Consumer( ObjToJSON objToJSON, ObjectMapper objectMapper, Consume consume, MultiThreadConfig multiThreadConfig) {
 
 
         this.objToJSON = objToJSON;
         this.objectMapper = objectMapper;
-        this.updateDataService = updateDataService;
+
         this.consume = consume;
         this.multiThreadConfig = multiThreadConfig;
     }
 
 
-//    @Async
+    @Async
     @KafkaHandler
     public CompletableFuture<Void> consumer(KafkaObertka obertka) throws JsonProcessingException {
         System.out.println("OBERTKA = " + (obertka == null ? "null" : obertka.getClass().getName()));
@@ -62,7 +62,7 @@ public class Consumer {
         return CompletableFuture.runAsync(()->{
             consume.consume(payload, className, methodsKafka);
             System.out.println("Консьюмер сработал");
-        },multiThreadConfig.executorService());
+        }/*,multiThreadConfig.executorService()*/);
 
     }
     public Object getConsumed() {

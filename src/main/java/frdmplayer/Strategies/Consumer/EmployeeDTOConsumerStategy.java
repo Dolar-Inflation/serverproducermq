@@ -20,8 +20,7 @@ import java.util.List;
 public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
 
 
-    private final ObjToJSON objToJSON;
-    private final ObjectMapper objectMapper;
+
 
     private final EmployeeCrudTemplate employeeCrudTemplate;
 

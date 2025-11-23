@@ -29,7 +29,7 @@ public abstract class CrudAbstractMethods<E,D> {
 
      return performReadAll().stream()
                 .map(mappingStrategy::toDto)
-//                .forEach(System.out::println);
+
                 .toList();
 
 

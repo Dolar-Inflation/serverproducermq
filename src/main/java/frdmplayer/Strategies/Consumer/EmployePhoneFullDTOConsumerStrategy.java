@@ -30,7 +30,7 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
-//            case READALL -> getDbInfo.getAllRelations();
+
             case READALL -> {
                 List<EmployePhoneFullDTO> employePhoneFullDTOList = fullTableCrudTemplate.readAll();
                 employePhoneFullDTOList.forEach(System.out::println);
@@ -39,8 +39,7 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
 
 
                         case READ -> {
-//                EmployePhoneFullDTO dto = (EmployePhoneFullDTO) obj;
-//                getDbInfo.GetById(dto.getId());
+
                             try {
 
 
@@ -56,7 +55,7 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
                 try {
 
 
-//                updateDataService.updateData((EmployePhoneFullDTO) obj);
+
                     EmployePhoneFullDTO employePhoneFullDTO = (EmployePhoneFullDTO) obj;
                     fullTableCrudTemplate.patch(employePhoneFullDTO.getId(), employePhoneFullDTO);
                     System.out.println("patched: " + employePhoneFullDTO);

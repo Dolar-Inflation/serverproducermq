@@ -15,23 +15,9 @@ public class EmployeeDTOProducerStrategy implements KafkaProducerStrategy {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ObjToJSON objToJSON;
     private static final String TOPIC = "test-topic";
-//
-//
-//    @Override
-//    public boolean supports(Object dto, MethodsKafka method) {
-//
-//        return dto instanceof EmployeeDTO;
-//    }
-//    @Override
-//    public void send(EmployeeDTO employeeDTO) throws JsonProcessingException {
-//        objToJSON.convertToJson(employeeDTO);
-//        kafkaTemplate.send(TOPIC, employeeDTO);
-//        System.out.println("Sent EmployeeDTO with method " + employeeDTO);
-//
-//
-//
-//        }
-//    }
+
+
+    //просто реализация интерфейса KafkaProducerStrategy
         @Override
     public boolean supports(Object obj,MethodsKafka methodsKafka) {
             return obj instanceof EmployeeDTO;
@@ -43,10 +29,7 @@ public class EmployeeDTOProducerStrategy implements KafkaProducerStrategy {
             System.out.println(dto);
 
         }
-        public void sendId(Integer id) {
-            kafkaTemplate.send(TOPIC,id);
-            System.out.println(id);
-        }
+
 }
 
 

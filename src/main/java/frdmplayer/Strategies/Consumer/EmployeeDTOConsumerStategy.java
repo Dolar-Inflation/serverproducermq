@@ -29,7 +29,7 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
-//            case CREATE -> saveDataService.saveEmployeDTO((EmployeeDTO) obj);
+
             case CREATE -> employeeCrudTemplate.create((EmployeeDTO) obj);
             case DELETE ->{
                 try {

@@ -62,7 +62,7 @@ public class Consumer {
         return CompletableFuture.runAsync(()->{
             consume.consume(payload, className, methodsKafka);
             System.out.println("Консьюмер сработал");
-        }/*,multiThreadConfig.executorService()*/);
+        });
 
     }
     public Object getConsumed() {

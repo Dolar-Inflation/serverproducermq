@@ -22,26 +22,19 @@ public class KafkaController {
     @Autowired
 
 
-    private EmployesphoneRepository empPhoneRepository;
 
 
     private Producer producer;
-    private ObjToJSON objToJSON;
 
-    public KafkaController(  EmployesphoneRepository empPhoneRepository, Producer producer,ObjToJSON objToJSON) {
 
-        this.objToJSON = objToJSON;
-
-        this.empPhoneRepository = empPhoneRepository;
+    public KafkaController(  Producer producer) {
 
         this.producer = producer;
     }
         //маппинги для работы с таблицей employee
     @PostMapping("/api/messages/addemploye")
     public EmployeeDTO sendName(@RequestBody EmployeeDTO message) throws JsonProcessingException {
-//        producerService.sendMessage(message);
-//        producer.sendCreateEmployee(message);
-//        producer.send(message);
+
 
         producer.send(message,MethodsKafka.CREATE);
         return message;
@@ -62,11 +55,7 @@ public class KafkaController {
     }
     @DeleteMapping("/employee/delete")
     public EmployeeDTO deleteEmployee(@RequestBody EmployeeDTO employeeDTO ) throws JsonProcessingException {
-//        EmployeeDTO employeeDTO = new EmployeeDTO();
-//        employeeDTO.setId(id);
-//        producer.send(employeeDTO, MethodsKafka.DELETE);
-//        producerService.SendEmployeeDelete(employeeDTO);
-//        producer.sendDeleteEmployeeByID(employeeDTO);
+
         producer.send(employeeDTO,MethodsKafka.DELETE);
 
         System.out.println("employee data deleted " +  employeeDTO+"method sent"+MethodsKafka.values());
@@ -88,8 +77,7 @@ public class KafkaController {
     }
     @GetMapping("/phone/data/{id}")
     public PhoneNumberDTO getPhoneById(@PathVariable Integer id) {
-//        List<EmployePhoneFullDTO> employeeData = getDbInfo.getEmployeeById(id);
-//        System.out.println(employeeData);
+
         PhoneNumberDTO dull = new PhoneNumberDTO();
         dull.setId(id);
         producer.send(dull,MethodsKafka.READ);
@@ -117,7 +105,7 @@ public class KafkaController {
 //методы для работы с таблицей employeephonerelation
     @PostMapping("/api/messages/addrelation")
     public String sendRelation(@RequestBody EmployePhoneDTO message) throws JsonProcessingException {
-//        producerService.sendRelation(message);
+
         producer.send(message,MethodsKafka.CREATE);
         return "relation created " + message;
     }
@@ -128,7 +116,7 @@ public class KafkaController {
         EmployePhoneDTO employePhoneDTO = new EmployePhoneDTO();
         employePhoneDTO.setId(id);
         producer.send(employePhoneDTO,MethodsKafka.DELETE);
-//        producerService.sendFullEmployePhoneDeleteByID(employePhoneFullDTO);
+
         System.out.println("employee Relation data for deleting sent to kafka " + employePhoneDTO);
         return employePhoneDTO;
     }
@@ -166,8 +154,7 @@ public EmployePhoneDTO patchRelation(@RequestBody EmployePhoneDTO message) throw
 
     @GetMapping("/{id}")
     public EmployePhoneFullDTO getEmployeeById(@PathVariable Integer id) {
-//        List<EmployePhoneFullDTO> employeeData = getDbInfo.getEmployeeById(id);
-//        System.out.println(employeeData);
+
         EmployePhoneFullDTO dull = new EmployePhoneFullDTO();
         dull.setId(id);
         producer.send(dull,MethodsKafka.READ);
@@ -178,7 +165,7 @@ public EmployePhoneDTO patchRelation(@RequestBody EmployePhoneDTO message) throw
 
     @PatchMapping("/")
     public EmployePhoneFullDTO updateAllRecords(@RequestBody EmployePhoneFullDTO message) throws JsonProcessingException {
-//        producerService.sendUpdateDto(message);
+
         producer.send(message,MethodsKafka.PATCH);
         System.out.println("employee data sent " + message);
         return message;

@@ -28,13 +28,12 @@ public class Consume {
 
     @Async
     public CompletableFuture<Void> consume(Object obj,String objClassName, MethodsKafka methodsKafka) {
-//        String payloadClassName = obj.getClass().getName();
+
         for (KafkaConsumerStrategy strategy : strategies) {
             if(strategy.getClassName().equals(objClassName)) {
                 Class<?> targetClass = getClassByName(objClassName);
                 Object typedPayload = mapper.convertValue(obj, targetClass);
-//                strategy.handle(typedPayload, methodsKafka);
-                //System.out.println(Thread.currentThread().getName() + ": Consumed: " + typedPayload);
+
                 return CompletableFuture.runAsync(() -> {
                     strategy.handle(typedPayload, methodsKafka);
                     System.out.println(Thread.currentThread().getName() + ": Принял : " + typedPayload);

@@ -28,8 +28,7 @@ public class PhoneDTOConsumerStrategy implements KafkaConsumerStrategy {
     private final PhoneCrudTemplate phoneCrudTemplate;
 
 
-//TODO написать try catch для всех стратегий
-    //TODO протестить работу CrudTemplate-ов для relation и employee также расширить один из методов для полного обновления связанных строчек таблиц
+
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka) {
@@ -58,8 +57,6 @@ public class PhoneDTOConsumerStrategy implements KafkaConsumerStrategy {
             }
 
             case READ -> {
-//                PhoneNumberDTO phoneDTOList = phoneCrudTemplate.readById(((PhoneNumberDTO) obj).getId());
-//                System.out.println(phoneDTOList);
                 try {
 
 

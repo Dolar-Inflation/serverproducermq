@@ -30,11 +30,11 @@ public class Producer {
     public Future send(Object dto , MethodsKafka methodsKafka)  {
 
         String payloadClassName = dto.getClass().getSimpleName();
-        for(KafkaProducerStrategy strategy : strategies) {
+        for(KafkaProducerStrategy strategy : strategies) {// прогон списка стратегий на поодержку отправки нужного dto
             if(strategy.supports(dto, methodsKafka)) {
 
                 System.out.println(Thread.currentThread().getName() + ": Sent to Kafka");
-                return /*CompletableFuture.runAsync*/executorService.submit(() -> {
+                return executorService.submit(() -> {
                     try {
 
                         semaphore.acquire();
@@ -56,16 +56,16 @@ public class Producer {
                     }
                     System.out.println(Thread.currentThread().getName() + ": Отправил : " + dto);
                     System.out.println(dto.getClass());
-                }/*,executorService*/);
+                });
             }
         }
         throw new RuntimeException("No support for KafkaProducerStrategy");
     }
     @SuppressWarnings("unchecked")
     public void sendWithStrategy(KafkaProducerStrategy strategy, Object dto, MethodsKafka methodsKafka,String payloadClassName) throws JsonProcessingException {
-
+        //метод оборачивает дто crud методы и имя обьекта
         KafkaObertka obertka = new KafkaObertka(dto,methodsKafka,payloadClassName);
-        strategy.send(obertka);
+        strategy.send(obertka); // стратегия нужна здесь для реализации метода send
     }
 
 

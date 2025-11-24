@@ -32,7 +32,7 @@ public class KafkaController {
         this.producer = producer;
     }
         //маппинги для работы с таблицей employee
-    @PostMapping("/api/messages/addemploye")
+    @PostMapping("/employee/create")
     public EmployeeDTO sendName(@RequestBody EmployeeDTO message) throws JsonProcessingException {
 
 
@@ -94,7 +94,7 @@ public class KafkaController {
         producer.send(phoneNumberDTO,MethodsKafka.DELETE);
         return phoneNumberDTO;
     }
-    @PostMapping("/api/messages/addphone")
+    @PostMapping("/phone/create")
     public String sendPhone(@RequestBody PhoneNumberDTO message) throws JsonProcessingException {
 //        producerService.sendPhoneNumber(message);
         producer.send(message,MethodsKafka.CREATE);
@@ -103,7 +103,7 @@ public class KafkaController {
 
 
 //методы для работы с таблицей employeephonerelation
-    @PostMapping("/api/messages/addrelation")
+    @PostMapping("/relation/addrelation")
     public String sendRelation(@RequestBody EmployePhoneDTO message) throws JsonProcessingException {
 
         producer.send(message,MethodsKafka.CREATE);

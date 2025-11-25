@@ -3,7 +3,7 @@ INSERT INTO employee (fio, address, position) VALUES
     ('Петров П.П.', 'ул. Советская, 2', 'Разработчик'),
     ('Сидоров С.С.', 'ул. Победы, 3', 'Аналитик');
 
--- Добавим телефоны
+
 INSERT INTO phone (number, type) VALUES
     ('375291112233', 'mobile'),
     ('375172223344', 'office'),

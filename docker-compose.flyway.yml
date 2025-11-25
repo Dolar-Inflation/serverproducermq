@@ -16,7 +16,7 @@ services:
       SPRING_PROFILES_ACTIVE: flyway
 
   postgres:
-    image: postgres:16.0
+    image: postgres:15.5
     environment:
       POSTGRES_DB: testmqdb1
       POSTGRES_USER: postgres

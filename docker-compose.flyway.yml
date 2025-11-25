@@ -13,9 +13,10 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: flyway
 
   postgres:
-    image: postgres:16
+    image: postgres:16.0
     environment:
       POSTGRES_DB: testmqdb1
       POSTGRES_USER: postgres

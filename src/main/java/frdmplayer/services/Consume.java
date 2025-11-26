@@ -8,6 +8,8 @@ import frdmplayer.DTO.PhoneNumberDTO;
 import frdmplayer.Interfaces.KafkaConsumerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.concurrent.ExecutorService;
 @RequiredArgsConstructor
 
 public class Consume {
+    private static final Logger log = LoggerFactory.getLogger(Consume.class);
     private final List<KafkaConsumerStrategy> strategies;
     private final ObjectMapper mapper;
 
@@ -41,7 +44,7 @@ public class Consume {
                 }/*,executorService*/);
             }
         }
-        System.out.println("нихуя не сработало consume");
+       log.error("consume не нашёл стратегии");
         return CompletableFuture.completedFuture(null);
     }
 

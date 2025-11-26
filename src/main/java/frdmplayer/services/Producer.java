@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -24,20 +25,22 @@ public class Producer {
     private final List<KafkaProducerStrategy> strategies;
     private final ExecutorService executorService;
     private final Semaphore semaphore;
-
+    private static final Logger log = LoggerFactory.getLogger(Producer.class);
 
 
     public Future send(Object dto , MethodsKafka methodsKafka)  {
 
         String payloadClassName = dto.getClass().getSimpleName();
+        log.info("отправляю", payloadClassName);
         for(KafkaProducerStrategy strategy : strategies) {// прогон списка стратегий на поодержку отправки нужного dto
             if(strategy.supports(dto, methodsKafka)) {
-
+                log.debug("поддержка стратегии", strategy.getClass().getSimpleName(), payloadClassName);
                 System.out.println(Thread.currentThread().getName() + ": Sent to Kafka");
                 return executorService.submit(() -> {
                     try {
-
+                        log.debug("Thread {} -1 из семафоры", Thread.currentThread().getName());
                         semaphore.acquire();
+                        log.debug("Thread {} сколько осталось на счётчике семафоры permits={}", Thread.currentThread().getName(), semaphore.availablePermits());
                         try {
                             sendWithStrategy(strategy, dto, methodsKafka, payloadClassName);
                             Thread.sleep(2000);
@@ -47,7 +50,7 @@ public class Producer {
 
                         }finally {
                             semaphore.release();
-                            if (semaphore.availablePermits() > 0) {
+                            if (semaphore.availablePermits() >= 1) {
                                 System.out.println(Thread.currentThread().getName() + " вышел из неё");
                             }
                         }
@@ -59,7 +62,8 @@ public class Producer {
                 });
             }
         }
-        throw new RuntimeException("No support for KafkaProducerStrategy");
+        log.warn("не нашлось стратегии для payload {}", payloadClassName);
+        throw new RuntimeException("нет подходящей стратегии ");
     }
     @SuppressWarnings("unchecked")
     public void sendWithStrategy(KafkaProducerStrategy strategy, Object dto, MethodsKafka methodsKafka,String payloadClassName) throws JsonProcessingException {

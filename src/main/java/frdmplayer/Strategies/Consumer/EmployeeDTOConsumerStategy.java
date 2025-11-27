@@ -9,7 +9,7 @@ import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 
 
-
+import frdmplayer.services.LockTableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
 
 
 
-
+    private final LockTableService lockTableService;
     private final EmployeeCrudTemplate employeeCrudTemplate;
 
 
@@ -30,12 +30,24 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
 
-            case CREATE -> employeeCrudTemplate.create((EmployeeDTO) obj);
+            case CREATE ->{
+                lockTableService.lockTable("employee");
+                try
+            {
+                employeeCrudTemplate.create((EmployeeDTO) obj);
+            } finally {
+                    lockTableService.unlockTable("employee");
+                }
+            }
+
+
             case DELETE ->{
+                lockTableService.lockTable("employee");
                 try {
 
 
                     employeeCrudTemplate.deleteById(((EmployeeDTO) obj).getId());
+                    lockTableService.unlockTable("employee");
                 }catch (Exception e){
                     System.err.println(e.getMessage());
                 }
@@ -56,9 +68,12 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
                 }
             }
             case PATCH -> {
+                lockTableService.lockTable("employee");
                 try {
+
                     EmployeeDTO employeeDTO = (EmployeeDTO) obj;
                     employeeCrudTemplate.patch(employeeDTO.getId(), employeeDTO);
+                    lockTableService.unlockTable("employee");
                 }catch (Exception e){
                     System.err.println(e.getMessage());
                 }

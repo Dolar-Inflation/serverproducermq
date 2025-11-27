@@ -9,7 +9,7 @@ import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 
 
-
+import frdmplayer.services.LockTableService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,20 +22,30 @@ public class PhoneDTOConsumerStrategy implements KafkaConsumerStrategy {
 
 
 
-    private final ObjToJSON objToJSON;
-    private final ObjectMapper objectMapper;
+
 
     private final PhoneCrudTemplate phoneCrudTemplate;
-
+    private final LockTableService lockTableService;
 
 
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka) {
-            case CREATE -> phoneCrudTemplate.create((PhoneNumberDTO) obj);
+            case CREATE ->{
+                lockTableService.lockTable("phone");
+                try {
+
+
+                    phoneCrudTemplate.create((PhoneNumberDTO) obj);
+                } finally {
+                    lockTableService.unlockTable("phone");
+                }
+            }
             case DELETE ->{
+                lockTableService.lockTable("phone");
                 try {
                     phoneCrudTemplate.deleteById(((PhoneNumberDTO) obj).getId());
+                    lockTableService.unlockTable("phone");
                 }
                 catch(EntityNotFoundException e) {
                     System.err.println("Ошибка: " + e.getMessage());
@@ -47,9 +57,11 @@ public class PhoneDTOConsumerStrategy implements KafkaConsumerStrategy {
 
             }
             case PATCH -> {
+                lockTableService.lockTable("phone");
                 try {
                     PhoneNumberDTO phoneDTO = (PhoneNumberDTO) obj;
                     phoneCrudTemplate.patch(phoneDTO.getId(), phoneDTO);
+                    lockTableService.unlockTable("phone");
                 }
                 catch(EntityNotFoundException e) {
                     System.err.println("<UNK>: " + e.getMessage());

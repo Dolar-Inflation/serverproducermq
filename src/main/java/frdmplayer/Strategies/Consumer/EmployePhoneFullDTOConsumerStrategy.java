@@ -9,7 +9,7 @@ import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 
 
-
+import frdmplayer.services.LockTableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +20,10 @@ import java.util.List;
 public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrategy {
 
 
-    private final ObjToJSON objToJSON;
-    private final ObjectMapper objectMapper;
+
 
     private final FullTableCrudTemplate fullTableCrudTemplate;
+    private final LockTableService lockTableService;
 
 
 
@@ -52,6 +52,9 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
                             }
             }//этот метод ищет по таблице relation
             case PATCH ->{
+                lockTableService.lockTable("employeephonerelation");
+                lockTableService.lockTable("employee");
+                lockTableService.lockTable("phone");
                 try {
 
 
@@ -59,6 +62,9 @@ public class EmployePhoneFullDTOConsumerStrategy implements KafkaConsumerStrateg
                     EmployePhoneFullDTO employePhoneFullDTO = (EmployePhoneFullDTO) obj;
                     fullTableCrudTemplate.patch(employePhoneFullDTO.getId(), employePhoneFullDTO);
                     System.out.println("patched: " + employePhoneFullDTO);
+                    lockTableService.unlockTable("employeephonerelation");
+                    lockTableService.unlockTable("employee");
+                    lockTableService.unlockTable("phone");
                 }catch (Exception e) {
                     System.err.println("<UNK> <UNK> <UNK> <UNK>");
                 }

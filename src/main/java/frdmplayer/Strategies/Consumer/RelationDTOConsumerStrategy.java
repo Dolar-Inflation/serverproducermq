@@ -8,6 +8,7 @@ import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.ObjToJSON.ObjToJSON;
 
 
+import frdmplayer.services.LockTableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,21 +19,34 @@ import java.util.List;
 public class RelationDTOConsumerStrategy implements KafkaConsumerStrategy {
 
 
-    private final ObjToJSON objToJSON;
-    private final ObjectMapper objectMapper;
+
 
     private final RelationCrudTemplate relationCrudTemplate;
+    private final LockTableService lockTableService;
 
     @Override
     public void handle(Object obj, MethodsKafka methodsKafka) {
         switch (methodsKafka){
-            case CREATE -> relationCrudTemplate.create((EmployePhoneDTO)obj);
+
+            case CREATE -> {
+                lockTableService.lockTable("employeephonerelation");
+                try {
+
+
+                    relationCrudTemplate.create((EmployePhoneDTO) obj);
+                } finally {
+                    lockTableService.unlockTable("employeephonerelation");
+                }
+
+            }
 
             case DELETE -> {
+                lockTableService.lockTable("employeephonerelation");
                 try {
 
 
                     relationCrudTemplate.deleteById(((EmployePhoneDTO) obj).getId());
+                    lockTableService.unlockTable("employeephonerelation");
                 }
                 catch (Exception e) {
                     System.err.println(e.getMessage());
@@ -54,10 +68,12 @@ public class RelationDTOConsumerStrategy implements KafkaConsumerStrategy {
                 }
             }
             case PATCH -> {
+                lockTableService.lockTable("employeephonerelation");
                 try {
 
                     EmployePhoneDTO employePhoneDTO = (EmployePhoneDTO) obj;
                     relationCrudTemplate.patch(employePhoneDTO.getId(), employePhoneDTO);
+                    lockTableService.unlockTable("employeephonerelation");
                 }
                 catch (Exception e) {
                     System.err.println(e.getMessage());

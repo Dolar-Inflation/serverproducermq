@@ -5,6 +5,7 @@ import frdmplayer.DTO.EmployeeDTO;
 import frdmplayer.Entity.Employee;
 import frdmplayer.Interfaces.DtoMappinStrategy;
 import frdmplayer.Repository.EmployeeRepository;
+import frdmplayer.services.LockTableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +41,8 @@ public class EmployeeCrudTemplateUnitTest {
     private EmployeeCrudTemplate employeeCrudTemplate;
 
 
-
+    @Mock
+    private LockTableService lockTableService;
 
     @Test
     void FindById() {

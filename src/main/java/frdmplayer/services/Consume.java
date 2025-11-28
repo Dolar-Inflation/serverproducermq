@@ -26,8 +26,7 @@ public class Consume {
     private final List<KafkaConsumerStrategy> strategies;
     private final ObjectMapper mapper;
 
-    @Autowired
-    private ExecutorService executorService;
+
 
     @Async
     public CompletableFuture<Void> consume(Object obj,String objClassName, MethodsKafka methodsKafka) {
@@ -35,13 +34,16 @@ public class Consume {
         for (KafkaConsumerStrategy strategy : strategies) {
             if(strategy.getClassName().equals(objClassName)) {
                 Class<?> targetClass = getClassByName(objClassName);
+                log.debug("получен обьект {}",targetClass.getName());
                 Object typedPayload = mapper.convertValue(obj, targetClass);
 
                 return CompletableFuture.runAsync(() -> {
                     strategy.handle(typedPayload, methodsKafka);
-                    System.out.println(Thread.currentThread().getName() + ": Принял : " + typedPayload);
-
-                }/*,executorService*/);
+                    log.info("{}: handle реализует для [{}], метод [{}]",
+                            Thread.currentThread().getName(),
+                            strategy.getClass().getSimpleName(),
+                            methodsKafka);
+                });
             }
         }
        log.error("consume не нашёл стратегии");

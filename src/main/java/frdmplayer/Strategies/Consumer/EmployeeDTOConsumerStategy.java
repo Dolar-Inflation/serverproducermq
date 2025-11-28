@@ -10,9 +10,11 @@ import frdmplayer.ObjToJSON.ObjToJSON;
 
 
 import frdmplayer.services.LockTableService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @Component
@@ -20,7 +22,7 @@ import java.util.List;
 public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
 
 
-
+    private static final Logger log = LoggerFactory.getLogger(EmployeeDTOConsumerStategy.class);
     private final LockTableService lockTableService;
     private final EmployeeCrudTemplate employeeCrudTemplate;
 
@@ -35,6 +37,7 @@ public class EmployeeDTOConsumerStategy implements KafkaConsumerStrategy {
                 try
             {
                 employeeCrudTemplate.create((EmployeeDTO) obj);
+
             } finally {
                     lockTableService.unlockTable("employee");
                 }

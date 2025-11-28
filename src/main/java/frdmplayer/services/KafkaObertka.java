@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KafkaObertka<T> {
+public class KafkaObertka {
     private Object payload;
     private MethodsKafka methodsKafka;
     String payloadClassName;

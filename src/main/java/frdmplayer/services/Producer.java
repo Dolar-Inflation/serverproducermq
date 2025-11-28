@@ -1,42 +1,36 @@
 package frdmplayer.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import frdmplayer.Interfaces.KafkaProducerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
-import frdmplayer.ObjToJSON.ObjToJSON;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 
 @Service
 @RequiredArgsConstructor
 public class Producer {
 
-@Autowired
+
     private final List<KafkaProducerStrategy> strategies;
     private final ExecutorService executorService;
     private final Semaphore semaphore;
     private static final Logger log = LoggerFactory.getLogger(Producer.class);
 
 
-    public Future send(Object dto , MethodsKafka methodsKafka)  {
+    public void send(Object dto , MethodsKafka methodsKafka)  {
 
         String payloadClassName = dto.getClass().getSimpleName();
-        log.info("отправляю", payloadClassName);
+        log.info("отправляю {}", payloadClassName);
         for(KafkaProducerStrategy strategy : strategies) {// прогон списка стратегий на поодержку отправки нужного dto
             if(strategy.supports(dto, methodsKafka)) {
-                log.debug("поддержка стратегии", strategy.getClass().getSimpleName(), payloadClassName);
+                log.debug("поддержка стратегии {} {}", strategy.getClass().getSimpleName(), payloadClassName);
                 System.out.println(Thread.currentThread().getName() + ": Sent to Kafka");
-                return executorService.submit(() -> {
+                 executorService.submit(() -> {
                     try {
                         log.debug("Thread {} -1 из семафоры", Thread.currentThread().getName());
                         semaphore.acquire();
@@ -65,7 +59,6 @@ public class Producer {
         log.warn("не нашлось стратегии для payload {}", payloadClassName);
         throw new RuntimeException("нет подходящей стратегии ");
     }
-    @SuppressWarnings("unchecked")
     public void sendWithStrategy(KafkaProducerStrategy strategy, Object dto, MethodsKafka methodsKafka,String payloadClassName) throws JsonProcessingException {
         //метод оборачивает дто crud методы и имя обьекта
         KafkaObertka obertka = new KafkaObertka(dto,methodsKafka,payloadClassName);

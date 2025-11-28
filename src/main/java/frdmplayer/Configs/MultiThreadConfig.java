@@ -11,8 +11,14 @@ public class MultiThreadConfig {
     public ExecutorService executorService() {
         BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<Runnable>(20);
 
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10,10,10000, TimeUnit.MILLISECONDS, workQueue,new ThreadPoolExecutor.CallerRunsPolicy());
-
+//        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10,10,10000, TimeUnit.MILLISECONDS, workQueue,new ThreadPoolExecutor.CallerRunsPolicy());
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+                10,
+                10,
+                0L, TimeUnit.MILLISECONDS,
+                workQueue,
+                new ThreadPoolExecutor.CallerRunsPolicy()
+        );
         threadPoolExecutor.allowCoreThreadTimeOut(true);
         System.out.println(Thread.currentThread().getName());
         return threadPoolExecutor;

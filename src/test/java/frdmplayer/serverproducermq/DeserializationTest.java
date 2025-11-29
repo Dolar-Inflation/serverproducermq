@@ -31,9 +31,9 @@ public class DeserializationTest {
     @Test
     public void testDeserialization() throws Exception {
         EmployeeDTO dto = new EmployeeDTO();
-        dto.setFio("zzz");
-        dto.setAddress("svosvosvo");
-        dto.setPosition("vvvvvv");
+        dto.setFio("fio");
+        dto.setAddress("address");
+        dto.setPosition("position");
         producer.send(dto, MethodsKafka.CREATE);
 
         Awaitility.await()

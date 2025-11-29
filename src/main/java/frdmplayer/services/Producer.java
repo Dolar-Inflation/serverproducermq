@@ -23,41 +23,45 @@ public class Producer {
 
 
     public void send(Object dto , MethodsKafka methodsKafka)  {
-
         String payloadClassName = dto.getClass().getSimpleName();
-        log.info("отправляю {}", payloadClassName);
-        for(KafkaProducerStrategy strategy : strategies) {// прогон списка стратегий на поодержку отправки нужного dto
-            if(strategy.supports(dto, methodsKafka)) {
-                log.debug("поддержка стратегии {} {}", strategy.getClass().getSimpleName(), payloadClassName);
-                System.out.println(Thread.currentThread().getName() + ": Sent to Kafka");
-                 executorService.submit(() -> {
-                    try {
-                        log.debug("Thread {} -1 из семафоры", Thread.currentThread().getName());
-                        semaphore.acquire();
-                        log.debug("Thread {} сколько осталось на счётчике семафоры permits={}", Thread.currentThread().getName(), semaphore.availablePermits());
-                        try {
-                            sendWithStrategy(strategy, dto, methodsKafka, payloadClassName);
-                            Thread.sleep(2000);
-                            if (semaphore.availablePermits() <= 0) {
-                                System.out.println(Thread.currentThread().getName() + " вошёл в критическую секцию");
-                            }
+        try {
 
-                        }finally {
-                            semaphore.release();
-                            if (semaphore.availablePermits() >= 1) {
-                                System.out.println(Thread.currentThread().getName() + " вышел из неё");
+
+            log.info("отправляю {}", payloadClassName);
+            for (KafkaProducerStrategy strategy : strategies) {// прогон списка стратегий на поодержку отправки нужного dto
+                if (strategy.supports(dto, methodsKafka)) {
+                    log.debug("поддержка стратегии {} {}", strategy.getClass().getSimpleName(), payloadClassName);
+                    System.out.println(Thread.currentThread().getName() + ": Sent to Kafka");
+                    executorService.submit(() -> {
+                        try {
+                            log.debug("Thread {} -1 из семафоры", Thread.currentThread().getName());
+                            semaphore.acquire();
+                            log.debug("Thread {} сколько осталось на счётчике семафоры permits={}", Thread.currentThread().getName(), semaphore.availablePermits());
+                            try {
+                                sendWithStrategy(strategy, dto, methodsKafka, payloadClassName);
+                                Thread.sleep(2000);
+                                if (semaphore.availablePermits() <= 0) {
+                                    System.out.println(Thread.currentThread().getName() + " вошёл в критическую секцию");
+                                }
+
+                            } finally {
+                                semaphore.release();
+                                if (semaphore.availablePermits() >= 1) {
+                                    System.out.println(Thread.currentThread().getName() + " вышел из неё");
+                                }
                             }
+                        } catch (JsonProcessingException | InterruptedException e) {
+                            throw new RuntimeException(e);
                         }
-                    } catch (JsonProcessingException | InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.println(Thread.currentThread().getName() + ": Отправил : " + dto);
-                    System.out.println(dto.getClass());
-                });
+                        System.out.println(Thread.currentThread().getName() + ": Отправил : " + dto);
+                        System.out.println(dto.getClass());
+                    });
+                }
             }
+        }catch (Exception e) {
+            log.warn("не нашлось стратегии для payload {}",payloadClassName);
+            throw new RuntimeException("нет подходящей стратегии ");
         }
-        log.warn("не нашлось стратегии для payload {}", payloadClassName);
-        throw new RuntimeException("нет подходящей стратегии ");
     }
     public void sendWithStrategy(KafkaProducerStrategy strategy, Object dto, MethodsKafka methodsKafka,String payloadClassName) throws JsonProcessingException {
         //метод оборачивает дто crud методы и имя обьекта

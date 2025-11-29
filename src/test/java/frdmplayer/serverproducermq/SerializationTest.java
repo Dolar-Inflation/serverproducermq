@@ -1,24 +1,20 @@
 package frdmplayer.serverproducermq;
-
 import frdmplayer.DTO.EmployeeDTO;
 import frdmplayer.KafkaMethods.MethodsKafka;
-import frdmplayer.services.Consumer;
 import frdmplayer.services.Producer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
-
-
 import java.util.Map;
+
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,10 +32,11 @@ public class SerializationTest {
     @Test
     public void testSerialization() throws Exception {
         EmployeeDTO dto = new EmployeeDTO();
-        dto.setFio("zzz");
-        dto.setAddress("svosvosvo");
-        dto.setPosition("vvvvvv");
+        dto.setFio("fio");
+        dto.setAddress("address");
+        dto.setPosition("position");
         producer.send(dto, MethodsKafka.CREATE);
+
 
         Map<String, Object> consumerProps =
                 KafkaTestUtils.consumerProps("testGroup", "true", embeddedKafka);
@@ -52,8 +49,8 @@ public class SerializationTest {
                 KafkaTestUtils.getSingleRecord(consumer, "test-topic");
 
         String value = record.value();
-        assertTrue(value.contains("\"fio\":\"zzz\""));
-        assertTrue(value.contains("\"address\":\"svosvosvo\""));
-        assertTrue(value.contains("\"position\":\"vvvvvv\""));
+        assertTrue(value.contains("\"fio\":\"fio\""));
+        assertTrue(value.contains("\"address\":\"address\""));
+        assertTrue(value.contains("\"position\":\"position\""));
     }
 }

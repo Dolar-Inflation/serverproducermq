@@ -19,7 +19,6 @@ public class MultiThreadConfig {
                 workQueue,
                 new ThreadPoolExecutor.CallerRunsPolicy()
         );
-        threadPoolExecutor.allowCoreThreadTimeOut(true);
         System.out.println(Thread.currentThread().getName());
         return threadPoolExecutor;
 

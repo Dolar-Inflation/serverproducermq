@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PhoneDTOProducerStrategy implements KafkaProducerStrategy {
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    private static final String TOPIC = "test-topic";
+    private  final String TOPIC = TopicString.topic;
     private final ObjToJSON objToJSON;
 
 

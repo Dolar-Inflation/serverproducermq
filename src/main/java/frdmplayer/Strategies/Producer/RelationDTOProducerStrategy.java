@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class RelationDTOProducerStrategy implements KafkaProducerStrategy {
     private final KafkaTemplate<String,Object> kafkaTemplate;
     private final ObjToJSON objToJSON;
-    private static final String TOPIC = "test-topic";
+    private  final String TOPIC = TopicString.topic;
 
     @Override
     public boolean supports(Object dto, MethodsKafka method){

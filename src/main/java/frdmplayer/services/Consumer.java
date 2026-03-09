@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
 @Service
-@KafkaListener(topics = "test-topic", groupId = "my-group")
+@KafkaListener(topics = "my-topic", groupId = "my-group")
 public class Consumer {
 
     private final ObjToJSON objToJSON;

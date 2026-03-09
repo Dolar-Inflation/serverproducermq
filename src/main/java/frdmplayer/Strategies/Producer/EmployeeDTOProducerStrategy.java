@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 public class EmployeeDTOProducerStrategy implements KafkaProducerStrategy {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ObjToJSON objToJSON;
-    private static final String TOPIC = "test-topic";
+
+    private  final String TOPIC = TopicString.topic;
 
 
     //просто реализация интерфейса KafkaProducerStrategy

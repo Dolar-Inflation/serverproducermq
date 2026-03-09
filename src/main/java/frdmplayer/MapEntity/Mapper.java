@@ -1,9 +1,10 @@
 package frdmplayer.MapEntity;
 
 import frdmplayer.Interfaces.DtoMappinStrategy;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 public class Mapper {
     private final List<DtoMappinStrategy<?,?>> strategies;
 
@@ -15,6 +16,7 @@ public class Mapper {
                 .filter(s ->s.supports(entityClass) && s.getDtoClass().equals(dtoClass))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Can't find strategy for " + entityClass.getName()));
+
    }
 
 }

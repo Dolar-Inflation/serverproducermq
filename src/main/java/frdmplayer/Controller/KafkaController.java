@@ -1,20 +1,21 @@
 package frdmplayer.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import frdmplayer.DTO.*;
 import frdmplayer.KafkaMethods.MethodsKafka;
 
-import frdmplayer.ObjToJSON.ObjToJSON;
-import frdmplayer.Repository.EmployesphoneRepository;
+
 
 import frdmplayer.services.Producer;
-import lombok.RequiredArgsConstructor;
+
+import org.apache.kafka.common.KafkaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+
 
 @RestController
 
@@ -58,14 +59,26 @@ public class KafkaController {
 
         producer.send(employeeDTO,MethodsKafka.DELETE);
 
-        System.out.println("employee data deleted " +  employeeDTO+"method sent"+MethodsKafka.values());
+        System.out.println("employee data deleted " +  employeeDTO+"method sent"+ Arrays.toString(MethodsKafka.values()));
         return employeeDTO;
     }
     @PatchMapping("/employee/patch")
-    public EmployeeDTO patchEmployee(@RequestBody EmployeeDTO employeeDTO ) throws JsonProcessingException {
-        producer.send(employeeDTO,MethodsKafka.PATCH);
-        return employeeDTO;
+    public EmployeeDTO patchEmployee(@RequestBody EmployeeDTO employeeDTO ) throws KafkaException {
+        try {
+
+
+            producer.send(employeeDTO, MethodsKafka.PATCH);
+            return employeeDTO;
+        }
+       catch(KafkaException e){
+
+                throw new KafkaException( e);
+            }
+
     }
+
+
+
 
 
 //маппинги для работы с таблицей phone

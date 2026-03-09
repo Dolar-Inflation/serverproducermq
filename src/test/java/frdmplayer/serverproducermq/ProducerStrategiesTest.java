@@ -30,8 +30,7 @@ public class ProducerStrategiesTest {
 
     @InjectMocks
     Producer producer;
-    @Mock
-    KafkaProducerStrategy strategies;
+
     @Mock
     ExecutorService executorService;
     @Mock
@@ -64,6 +63,7 @@ public class ProducerStrategiesTest {
 //    Mockito.when(executorService.submit(Mockito.any(Runnable.class))).thenReturn(null);
     Mockito.when(executorService.submit(Mockito.any(Runnable.class)))
             .thenAnswer(inv -> {
+
                 Runnable r = inv.getArgument(0);
                 r.run();
                 return null;

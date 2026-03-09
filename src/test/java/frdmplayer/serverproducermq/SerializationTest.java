@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@EmbeddedKafka(partitions = 1, topics = {"test-topic"})
+@EmbeddedKafka(partitions = 1, topics = {"my-topic"})
 
 public class SerializationTest {
     @Autowired
@@ -43,10 +43,10 @@ public class SerializationTest {
         ConsumerFactory<String, String> cf =
                 new DefaultKafkaConsumerFactory<>(consumerProps, new StringDeserializer(), new StringDeserializer());
         org.apache.kafka.clients.consumer.Consumer<String, String> consumer = cf.createConsumer();
-        embeddedKafka.consumeFromAnEmbeddedTopic(consumer, "test-topic");
+        embeddedKafka.consumeFromAnEmbeddedTopic(consumer, "my-topic");
 
         ConsumerRecord<String, String> record =
-                KafkaTestUtils.getSingleRecord(consumer, "test-topic");
+                KafkaTestUtils.getSingleRecord(consumer, "my-topic");
 
         String value = record.value();
         assertTrue(value.contains("\"fio\":\"fio\""));

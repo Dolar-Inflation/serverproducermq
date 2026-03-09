@@ -5,11 +5,14 @@ import frdmplayer.DTO.EmployeeDTO;
 import frdmplayer.KafkaMethods.MethodsKafka;
 import frdmplayer.Strategies.Consumer.EmployeeDTOConsumerStategy;
 import frdmplayer.services.LockTableService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
+
 import static org.mockito.Mockito.verify;
 
 
@@ -23,12 +26,16 @@ public class EmployeeDTOconsumerStreategyUnitTest {
     @Mock
     private LockTableService lockTableService;
 
+    @InjectMocks
+    private EmployeeDTOConsumerStategy employeeDTOConsumerStategy;
+
 
 
     @Test
     public void testEmployeeDTOConsumerUnit() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
-        EmployeeDTOConsumerStategy employeeDTOConsumerStategy = new EmployeeDTOConsumerStategy(lockTableService,employeeCrudTemplate);
+
+        Mockito.when(employeeCrudTemplate.create(Mockito.any())).thenReturn(employeeDTO);
 
         employeeDTOConsumerStategy.handle(employeeDTO, MethodsKafka.CREATE);
 

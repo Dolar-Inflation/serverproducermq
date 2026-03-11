@@ -34,11 +34,8 @@ public class EmployeeDTOconsumerStreategyUnitTest {
     @Test
     public void testEmployeeDTOConsumerUnit() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
-
         Mockito.when(employeeCrudTemplate.create(Mockito.any())).thenReturn(employeeDTO);
-
         employeeDTOConsumerStategy.handle(employeeDTO, MethodsKafka.CREATE);
-
         verify(employeeCrudTemplate).create(employeeDTO);
 
     }

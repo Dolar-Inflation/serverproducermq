@@ -1,11 +1,6 @@
 package frdmplayer.serverproducermq;
-
-import frdmplayer.Configs.AsyncConfig;
 import frdmplayer.DTO.EmployeeDTO;
-import frdmplayer.Interfaces.KafkaProducerStrategy;
 import frdmplayer.KafkaMethods.MethodsKafka;
-import frdmplayer.ObjToJSON.ObjToJSON;
-import frdmplayer.services.Consume;
 import frdmplayer.services.Consumer;
 import frdmplayer.services.Producer;
 import org.awaitility.Awaitility;

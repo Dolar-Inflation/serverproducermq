@@ -39,7 +39,7 @@ public class Producer {
                             log.debug("Thread {} сколько осталось на счётчике семафоры permits={}", Thread.currentThread().getName(), semaphore.availablePermits());
                             try {
                                 sendWithStrategy(strategy, dto, methodsKafka, payloadClassName);
-                                Thread.sleep(2000);
+//                                Thread.sleep(2000);
                                 if (semaphore.availablePermits() <= 0) {
                                     System.out.println(Thread.currentThread().getName() + " вошёл в критическую секцию");
                                 }

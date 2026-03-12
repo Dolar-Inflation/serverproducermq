@@ -1,0 +1,48 @@
+package com.messenger.consumer.DALBuisnessLogic.Consumer.DTO;
+
+import lombok.Data;
+
+
+@Data
+
+public class EmployePhoneDTO {
+    private Integer id;
+    private Integer employeId;
+    private Integer phoneId;
+
+    public EmployePhoneDTO() {
+    }
+
+    public EmployePhoneDTO(Integer id, Integer employeId, Integer phoneId) {
+        this.employeId = employeId;
+        this.phoneId = phoneId;
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getEmployeId() {
+        return employeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeId = employeId;
+    }
+
+    public Integer getPhoneId() {
+        return phoneId;
+    }
+
+    public void setPhoneId(Integer phoneId) {
+        this.phoneId = phoneId;
+    }
+
+
+}
+

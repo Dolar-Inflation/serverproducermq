@@ -1,7 +1,6 @@
 package frdmplayer.DTO;
 
-import frdmplayer.Entity.Employee;
-import frdmplayer.Entity.Phone;
+
 import lombok.Data;
 
 

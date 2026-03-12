@@ -32,11 +32,7 @@ public class Consumer {
 
     @Autowired
     public Consumer( ObjToJSON objToJSON, Consume consume, MultiThreadConfig multiThreadConfig) {
-
-
         this.objToJSON = objToJSON;
-
-
         this.consume = consume;
         this.multiThreadConfig = multiThreadConfig;
     }
